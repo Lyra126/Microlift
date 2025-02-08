@@ -46,28 +46,6 @@ const Welcome = () => {
         });
     }, []);
 
-    // useEffect(() => {
-    //     Animated.timing(fadeAnim, {
-    //       toValue: 1, // Animate to fully opaque
-    //       duration: 1000, // Duration of the animation
-    //       useNativeDriver: true, // For better performance
-    //     }).start();
-    //   }, []);
-
-    //   return (
-    //     <View style={styles.container}>
-    //         <Animated.Image
-    //                 style={styles.image}
-    //                 source={require('./assets/finance.png')}
-    //             />
-    //       <Animated.View 
-    //         style={[
-    //           styles.box, 
-    //           { opacity: fadeAnim } // Apply opacity from animation
-    //         ]}
-    //       />
-    //     </View>
-
     return (
         <SafeAreaView style={[globalStyles.AndroidSafeArea, styles.container]}>
             <Animated.View

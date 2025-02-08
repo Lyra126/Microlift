@@ -7,7 +7,7 @@ userRouter.route('/getAll').get(getAllUsers);
 userRouter.route('/createUser').post(createUser);
 userRouter.route('/user').get(getUserById);
 userRouter.route('/get').get(getUserByEmailAndPassword);
-userRouter.route('/getUser').get(getUserByEmail);
+userRouter.route('/getUserByEmail').get(getUserByEmail);
 userRouter.route('/getAllEntries').get(getAllEntries);
 userRouter.route('/addNewEntry').post(addNewEntry);
 
