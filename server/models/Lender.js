@@ -7,7 +7,8 @@ const LenderSchema = new mongoose.Schema({
     businessName: {type: String, required: true},
     contributions: {type: Array, required: true},
     totalContributed: {type: Number, required: true},
-    activeLoans: {type: Number, required: true},
+    pendingLoans: {type: Array, required: true},
+    confirmedLoans: {type: Array, required: true},
 
 }); 
 

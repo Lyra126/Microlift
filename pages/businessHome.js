@@ -16,8 +16,21 @@ const BusinessHome = () => {
     axios.get(`http://${IP_ADDRESS}:8080/appdata/getLenders`)
       .then((response) => {
         console.log("Response data:", response.data);
-        if (response.data[0] && response.data[0].length > 0) {
-          setLenders(response.data[0].lenders); 
+        
+        if (response.data && response.data.length > 0) {
+          const lendersData = response.data.map(lender => ({
+            name: lender.name,
+            email: lender.email,
+            password: lender.password,
+            businessName: lender.businessName,
+            contributions: lender.contributions,
+            totalContributed: lender.totalContributed,
+            pendingLoans: lender.pendingLoans || [],  // Default to an empty array if not present
+            confirmedLoans: lender.confirmedLoans || [] // Default to an empty array if not present
+          }));
+  
+          // Set the lenders state
+          setLenders(lendersData);
         } else {
           console.log("No lenders found.");
         }
@@ -59,7 +72,6 @@ const BusinessHome = () => {
                 Contributions: {item.contributions.length > 0 ? item.contributions.join(", ") : "No contributions available"}
               </Text>
               <Text style={styles.bioText}>Total Contributed: {item.totalContributed || "No amount available"}</Text>
-              <Text style={styles.bioText}>Active Loans: {item.activeLoans || "No amount available"}</Text>
             </View>
 
 
@@ -202,7 +214,7 @@ const styles = StyleSheet.create({
   acceptButtonText: {
     color: "#2C6E49",
     fontWeight: "bold",
-  },
+  }
 });
 
 export default BusinessHome;
