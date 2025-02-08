@@ -30,7 +30,6 @@ const Home = ({ route }) => {
   }, [route.params]);
 
 
-  //something here is broken
   const fetchbBorrowers = () => {
     console.log("Fetching lenders...");
     axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowers`)
@@ -148,7 +147,11 @@ const Home = ({ route }) => {
 
         <TouchableOpacity
           style={[styles.button, styles.likeButton]}
-          onPress={() => setModalVisible(true)}
+          onPress={() => {
+            setModalVisible(true);
+            handleNextUser();
+            console.log("Liked");
+          }}
         >
           <Ionicons name="heart" size={32} color="white" />
         </TouchableOpacity>
