@@ -4,26 +4,26 @@ import { IP_ADDRESS } from '@env';
 import axios from 'axios';
 
 const BusinessHome = () => {
-  const [users, setUsers] = useState([]);
+  const [lenders, setLenders] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(null); 
 
   useEffect(() => {
-    fetchUsers();
+    fetchLenders();
   }, []); 
 
-  const fetchUsers = () => {
-    console.log("Fetching users...");
-    axios.get(`http://${IP_ADDRESS}:8080/users/getAll`)
+  const fetchLenders = () => {
+    console.log("Fetching lenders...");
+    axios.get(`http://${IP_ADDRESS}:8080/appdata/getLenders`)
       .then((response) => {
         console.log("Response data:", response.data);
-        if (response.data && response.data.length > 0) {
-          setUsers(response.data); 
+        if (response.data[0] && response.data[0].length > 0) {
+          setLenders(response.data[0].lenders); 
         } else {
-          console.log("No users found.");
+          console.log("No lenders found.");
         }
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching lenders:", error);
       });
   };
 
@@ -38,7 +38,7 @@ const BusinessHome = () => {
       </TouchableOpacity>
 
       <FlatList
-        data={users}  
+        data={lenders}  
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.profileContainer}>
@@ -46,15 +46,22 @@ const BusinessHome = () => {
             <Image source={require('./assets/finance.png')} style={styles.profileImage} /> {/* to be replaced with company's profile photo*/}
               <View style={styles.profileText}>
                 <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.company}>Test Company</Text> {/* to be replaced with item.company */}
+                <Text style={styles.company}>{item.businessName}</Text> {/* to be replaced with item.company */}
               </View>
             </View>
+           
 
             {/* base info that every business owner sees */}
             <View style={styles.bioContainer}>
               <Text style={styles.bioTitle}>Description</Text>
-              <Text style={styles.bioText}>{item.email || "No description available"}</Text>
+              <Text style={styles.bioText}>{item.email || "No email available"}</Text>
+              <Text style={styles.bioText}>
+                Contributions: {item.contributions.length > 0 ? item.contributions.join(", ") : "No contributions available"}
+              </Text>
+              <Text style={styles.bioText}>Total Contributed: {item.totalContributed || "No amount available"}</Text>
+              <Text style={styles.bioText}>Active Loans: {item.activeLoans || "No amount available"}</Text>
             </View>
+
 
             {/* toggles extra details */}
             <TouchableOpacity onPress={() => toggleExpansion(index)} style={styles.toggleButton}>
