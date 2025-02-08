@@ -55,6 +55,34 @@ const getBorrowerByEmail = async (req, res) => {
     }
 };
 
+const updateLenderLoans = async (req, res) => {
+    try {
+        const {email, businessName, loan, cut } = req.body;
+
+        const lender = await LenderModel.findOne({ email });
+        const newLoan = {
+            businessName,
+            loan,
+            cut
+        };
+
+        // Push the new loan tuple to the pendingLoans array
+        lender.pendingLoans.push(newLoan);
+
+        // Save the updated lender back to the database
+        await lender.save();
+        if (!lender) {
+            return res.status(404).json({ error: 'Lender not found' });
+        }
+    
+        res.json(lender);
+    } catch (error) {
+        // Handle any errors
+        res.status(500).json({ error: 'Failed to fetch lender' });
+    }
+};
+
+
 
 const createLender = async (req, res) => {
 };
@@ -73,5 +101,6 @@ export{
     createBorrower,
     getPersonById,
     getLenderByEmail,
-    getBorrowerByEmail
+    getBorrowerByEmail,
+    updateLenderLoans
 }

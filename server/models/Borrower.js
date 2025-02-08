@@ -9,6 +9,8 @@ const BorrowerSchema = new mongoose.Schema({
     businessIdea: {type: String, required: true},
     industry: {type: String, required: false},
     loans: {type: String, required: true},
+    pendingLoans: {type: Array, required: true},
+    confirmedLoans: {type: Array, required: true},
 
 }); 
 

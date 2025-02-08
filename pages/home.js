@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Modal, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from 'axios'; 
+import {IP_ADDRESS} from '@env'
 
 const { width } = Dimensions.get("window");
 const users = [
@@ -8,13 +10,15 @@ const users = [
   { id: 2, name: "Bob", age: 25, image: require("../pages/assets/finance.png") },
 ];
 
-const Home = () => {
+const Home = ({ route }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loanAmount, setLoanAmount] = useState("");
   const [percentageCut, setPercentageCut] = useState("");
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [businessName, setBusinessName] = useState("");
 
   const handleFlip = () => setFlipped(!flipped);
 
@@ -23,23 +27,32 @@ const Home = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
   };
 
+  useEffect(() => {
+    //REMOVE
+    setEmail("john@example.com")
+    setBusinessName("Lucy Bakery")
+    if (route.params) {
+      const { email } = route.params;
+      setEmail(email);
+    }
+  }, [route.params]);
+
   const updateDatabase = (loanAmount, percentageCut) => {
-      axios
-          .get(`http://${IP_ADDRESS}:8080/appdata/getLenderByEmail?email=${email}`)
-          .then((response) => {
-              const userData = response.data;
-              
-              if (userData && userData.password === password) {
-                  // Login successful, navigate to the home page or trigger onLogin
-                  onLogin(email); // Handle login state change here
-              } else {
-                  // If user is not found or any other issue
-                  setError("Incorrect email or password. Please try again.");
-              }
-          })
-          .catch((error) => {
-              console.error("Error updating database", error);
-          });
+    
+    
+    axios
+      .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderLoans`, {
+          email: email,        // lender's email
+          businessName: businessName, // business name associated with the loan
+          loan: loanAmount, // loan amount
+          cut: percentageCut, // cut percentage
+      })
+      .then((response) => {
+          console.log("Database updated:", response.data);
+      })
+      .catch((error) => {
+          console.error("Error updating database", error);
+      });
   };
 
   const handleSubmit = () => {
