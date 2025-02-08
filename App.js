@@ -16,19 +16,17 @@ const Stack = createStackNavigator();
 // authentification screens
 const AuthStack = ({ handleLogin }) => (
     <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="PromptLoginSignUp" component={PromptLoginSignUp} />
-        <Stack.Screen name="Login">
+        <Stack.Screen name="Welcome" component={Welcome} options={{ animation: 'fade'}}/>
+        <Stack.Screen name="PromptLoginSignUp" component={PromptLoginSignUp} options={{ animation: 'fade'}}/>
+        <Stack.Screen name="Login" options={{ animation: 'fade'}}>
             {props => <Login {...props} onLogin={handleLogin} />}
         </Stack.Screen>
-        <Stack.Screen name="SignUp">
+        <Stack.Screen name="SignUp" options={{ animation: 'fade'}}>
             {props => <SignUp {...props} onLogin={handleLogin} />}
         </Stack.Screen>
     </Stack.Navigator>
 );
 
-// after user logs in screens
-// after user logs in screens
 const AppStack = ({email}) => {
     const navigation = useNavigation();
     useEffect(() => {
@@ -39,15 +37,13 @@ const AppStack = ({email}) => {
 
     return (
         <Stack.Navigator initialRouteName="Navigation" screenOptions={{ headerShown: false }} >
-            <Stack.Screen name="Navigation" component={Navigation} />
-            <Stack.Screen name="Home" component={Home} initialParams={{ email: email }} />
+            <Stack.Screen name="Navigation" component={Navigation}options={{ animation: 'fade'}} />
+            <Stack.Screen name="Home" component={Home} initialParams={{ email: email }} options={{ animation: 'fade'}}/>
         </Stack.Navigator>
     );
 };
 
 
-
-// In your App.js file
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [email, setEmail] = useState("");

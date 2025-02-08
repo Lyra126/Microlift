@@ -15,6 +15,8 @@ const Welcome = () => {
     const scale = useRef(new Animated.Value(1.2)).current;
     const opacity = useRef(new Animated.Value(1)).current;  // Added opacity for fade out effect
 
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
     useEffect(() => {
         Animated.loop(
             Animated.parallel([
@@ -43,6 +45,28 @@ const Welcome = () => {
             });
         });
     }, []);
+
+    // useEffect(() => {
+    //     Animated.timing(fadeAnim, {
+    //       toValue: 1, // Animate to fully opaque
+    //       duration: 1000, // Duration of the animation
+    //       useNativeDriver: true, // For better performance
+    //     }).start();
+    //   }, []);
+
+    //   return (
+    //     <View style={styles.container}>
+    //         <Animated.Image
+    //                 style={styles.image}
+    //                 source={require('./assets/finance.png')}
+    //             />
+    //       <Animated.View 
+    //         style={[
+    //           styles.box, 
+    //           { opacity: fadeAnim } // Apply opacity from animation
+    //         ]}
+    //       />
+    //     </View>
 
     return (
         <SafeAreaView style={[globalStyles.AndroidSafeArea, styles.container]}>

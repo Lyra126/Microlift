@@ -48,7 +48,7 @@ const SignUp = ({ onLogin, ...props }) => {
         
         setErrorMessage(""); 
         console.log("creating user...");
-        axios.get(`http://192.168.1.159:8080/users/get?email=${email}`)
+        axios.get(`http://192.168.12.221:8080/users/get?email=${email}`)
             .then((response) => {
                 const userData = response.data;
                 if (userData) {
@@ -58,7 +58,7 @@ const SignUp = ({ onLogin, ...props }) => {
                 } else {
                     console.log("user doesn't exist");
                     // User not found, create a new user
-                    axios.post('http://10.136.227.124:8080/users/createUser', {
+                    axios.post('http://192.168.12.221:8080/users/createUser', {
                         email_address: email,
                         name: name,
                         username: name,
@@ -78,7 +78,7 @@ const SignUp = ({ onLogin, ...props }) => {
             .catch((error) => {
                 console.log("user doesn't exist");
                     // User not found, create a new user
-                    axios.post('http://192.168.1.159:8080/users/createUser', {
+                    axios.post('http://192.168.12.221:8080/users/createUser', {
                         email_address: email,
                         name: username,
                         username: username,
