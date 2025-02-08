@@ -27,6 +27,7 @@ const Login = ({ onLogin, ...props }) => {
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState("");
     const [error, setError] = useState("");
+    const { setGlobalState } = useGlobal();
 
     useEffect(() => {
         if (fontsLoaded) {
@@ -40,13 +41,14 @@ const Login = ({ onLogin, ...props }) => {
 
 
     const handleSignIn = () => {
-      setError("");  // Reset any previous error
+      console.log(email);
+        setError("");  // Reset any previous error
       
       axios
           .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${email}`)
           .then((response) => {
               const userData = response.data;
-              
+              console.log(userData.email);
               if (userData && userData.password === password) {
                   // Login successful, navigate to the home page or trigger onLogin
                   setGlobalState({
@@ -125,7 +127,7 @@ const Login = ({ onLogin, ...props }) => {
 
             <View style={styles.buttonView}>
                 {/* change this to direct user to home page*/}
-                <TouchableOpacity style={styles.button} onPress={() => handleSignIn}>
+                <TouchableOpacity style={styles.button} onPress={handleSignIn}>
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
                 <View style={styles.optionsText}>

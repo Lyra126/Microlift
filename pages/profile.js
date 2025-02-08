@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { useGlobal } from './context/global';
+import axios from 'axios'; 
+import { IP_ADDRESS } from '@env'
 
 const Profile = () => {
   const [editing, setEditing] = useState(false);
-  // temp data - to be set to whoever is logged in
-  // TODO: needs to interact with database
+  const { globalState } = useGlobal();
+  
+  useEffect(() => {
+    console.log('Current Global State:', globalState);  // logs global email and user type
+  }, [globalState]);
+  
   const [userData, setUserData] = useState({
-    profileImage: require('./assets/finance.png'), // put an actual image eventually
+    profileImage: require('./assets/finance.png'),
     name: "John Doe",
     company: "Temporary Company",
     verification: "Verified",
@@ -16,7 +23,29 @@ const Profile = () => {
     targetGoal: "100 loans per year"
   });
 
-  {/* supports editing profile - TODO: update database */}
+  // Fetch user data from the API
+  useEffect(() => {
+    axios
+      .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${globalState.email}`)
+      .then((response) => {
+        const requestData = response.data;
+        // Update the userData state correctly by spreading the previous state
+        setUserData(prevData => ({
+          ...prevData,
+          name: requestData.name,
+          company: requestData.businessName,
+          verification: requestData.verification,
+          description: requestData.description,
+          goals: requestData.goals,
+          maxAmount: requestData.maxAmount,
+          targetGoal: requestData.targetGoal
+        }));
+      }, )
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []); 
+
   const handleEditChange = (field, value) => {
     setUserData(prevData => ({
       ...prevData,
@@ -34,7 +63,6 @@ const Profile = () => {
             <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
 
-          {/* simple display of basic profile info */}
           <View style={styles.profileContainer}>
             <View style={styles.profileHeader}>
               <Image source={userData.profileImage} style={styles.profileImage} />
