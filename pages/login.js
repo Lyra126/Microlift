@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, SafeAreaView, I
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from "@react-navigation/native";
+import { useGlobal } from "./context/global";
 import globalStyles from "./styles/globalStyles";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import axios from 'axios'; 
@@ -26,6 +27,7 @@ const Login = ({ onLogin, ...props }) => {
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState("");
     const [error, setError] = useState("");
+    const { setGlobalState } = useGlobal();
 
     useEffect(() => {
         if (fontsLoaded) {

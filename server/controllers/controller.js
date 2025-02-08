@@ -182,6 +182,43 @@ const updateBorrowerConfirmedLoans = async (req, res) => {
     }
 };
 
+const checkLenderExists = async (req, res) => {
+    try {
+        const { name, email } = req.query;
+        const lender = await LenderModel.findOne({ name, email });
+       
+
+        if (lender) {
+            return res.status(200).json({ 
+                exists: true, 
+            });
+        } else {
+            return res.status(404).json({ exists: false, message: 'Lender not found' });
+        }
+    } catch (error) {
+        console.error("Error checking lender existence:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
+const checkBorrowerExists = async (req, res) => {
+    try {
+        const { name, email } = req.query;
+        const borrower = await BorrowerModel.findOne({ name, email });
+
+        if (borrower) {
+            return res.status(200).json({ 
+                exists: true, 
+
+            });
+        } else {
+            return res.status(404).json({ exists: false, message: 'Borrower not found' });
+        }
+    } catch (error) {
+        console.error("Error checking borrower existence:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
 
 
 
@@ -206,5 +243,7 @@ export{
     updateLenderPendingLoans,
     updateBorrowerPendingLoans,
     updateLenderConfirmedLoans,
-    updateBorrowerConfirmedLoans
+    updateBorrowerConfirmedLoans,
+    checkLenderExists,
+    checkBorrowerExists
 }
