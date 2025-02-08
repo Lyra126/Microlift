@@ -1,56 +1,67 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const Profile = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
+  const userData = {
+    profileImage: 'temp image', // put an actual image eventually
     name: "John Doe",
-    email: "johndoe@example.com",
-    bio: "company bio",
-    avatar: "", // profile image
-  });
-
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing);
+    company: "Temporary Company",
+    verification: "Verified",
+    description: "An experienced lender in the financial industry.",
+    goals: "Help borrowers achieve financial independence.",
+    maxAmount: "$50,000",
+    targetGoal: "100 loans per year"
   };
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user.avatar }} style={styles.avatar} />
-      {isEditing ? (
-        <>
-          <TextInput
-            style={styles.input}
-            value={user.name}
-            onChangeText={(text) => setUser({ ...user, name: text })}
-            placeholder="Full Name"
-          />
-          <TextInput
-            style={styles.input}
-            value={user.email}
-            onChangeText={(text) => setUser({ ...user, email: text })}
-            placeholder="Email"
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={[styles.input, styles.bioInput]}
-            value={user.bio}
-            onChangeText={(text) => setUser({ ...user, bio: text })}
-            placeholder="Bio"
-            multiline
-          />
-        </>
-      ) : (
-        <>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.email}>{user.email}</Text>
-          <Text style={styles.bio}>{user.bio}</Text>
-        </>
-      )}
-
-      <TouchableOpacity style={styles.button} onPress={handleEditToggle}>
-        <Text style={styles.buttonText}>{isEditing ? "Save" : "Edit Profile"}</Text>
+      <TouchableOpacity style={styles.backButton}>
+        <Text style={styles.backText}>←</Text>
       </TouchableOpacity>
+
+      <View style={styles.profileContainer}>
+        <View style={styles.profileHeader}>
+          <Image source={{ uri: userData.profileImage }} style={styles.profileImage} />
+          <View style={styles.profileText}>
+            <Text style={styles.name}>{userData.name}</Text>
+            <Text style={styles.company}>{userData.company}</Text>
+          </View>
+        </View>
+        
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Verification</Text>
+          <Text style={styles.bioText}>{userData.verification}</Text>
+        </View>
+
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Description of Lender</Text>
+          <Text style={styles.bioText}>{userData.description}</Text>
+        </View>
+
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Company</Text>
+          <Text style={styles.bioText}>{userData.company}</Text>
+        </View>
+
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Goals</Text>
+          <Text style={styles.bioText}>{userData.goals}</Text>
+        </View>
+
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Maximum Amount Willing to Lend</Text>
+          <Text style={styles.bioText}>{userData.maxAmount}</Text>
+        </View>
+
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioTitle}>Target Goal</Text>
+          <Text style={styles.bioText}>{userData.targetGoal}</Text>
+        </View>
+
+        <TouchableOpacity style={styles.editButton}>
+          <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -58,55 +69,78 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
+    backgroundColor: "#D5E8D4", 
+    padding: 20,
   },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 20,
+  backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    padding: 10,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
+  backText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: "#2C6E49",
   },
-  email: {
-    fontSize: 16,
-    color: "#666",
-    marginVertical: 5,
-  },
-  bio: {
-    fontSize: 14,
-    fontStyle: "italic",
-    marginBottom: 20,
-  },
-  input: {
-    width: "100%",
-    backgroundColor: "#f5f5f5",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 16,
-    marginVertical: 10,
-  },
-  bioInput: {
-    height: 80,
-    textAlignVertical: "top",
-  },
-  button: {
-    width: "100%",
-    backgroundColor: "#000",
+  profileContainer: {
+    backgroundColor: "#FFFFFF", 
     padding: 15,
     borderRadius: 10,
-    alignItems: "center",
-    marginTop: 20,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, 
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 15,
+  },
+  profileText: {
+    flexDirection: 'column',
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: "#2C6E49",
+  },
+  company: {
+    fontSize: 16,
+    color: "#555",
+  },
+  bioContainer: {
+    backgroundColor: "#F0F0F0",
+    padding: 10,
+    borderRadius: 8,
+    marginVertical: 5,
+  },
+  bioTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "#333",
+  },
+  bioText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  editButton: {
+    backgroundColor: "#A5D6A7", 
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    marginTop: 10,
+  },
+  editButtonText: {
+    color: "#2C6E49",
     fontWeight: "bold",
   },
 });
