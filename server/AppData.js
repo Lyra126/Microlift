@@ -16,6 +16,8 @@ app.get('/', (req,res) => {
 
 app.use('/appdata', router);
 
+app.use('/users', userRouter);
+
 const startServer = async () => {
     try{
         connectDB(process.env.MONGO_URL);

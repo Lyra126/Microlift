@@ -13,7 +13,7 @@ const Welcome = () => {
     const navigation = useNavigation();
     const progress = useRef(new Animated.Value(0.5)).current;
     const scale = useRef(new Animated.Value(1.2)).current;
-    // const opacity = useRef(new Animated.Value(1)).current;
+    const opacity = useRef(new Animated.Value(1)).current;  // Added opacity for fade out effect
 
     useEffect(() => {
         Animated.loop(
@@ -29,9 +29,17 @@ const Welcome = () => {
             ]),
             { iterations: 1 }
         ).start(() => {
-            navigation.reset({
-                index: 0, // resets the stack so that user cannot go back to this welcome screen
-                routes: [{ name: 'PromptLoginSignUp' }],
+            // Start fading out before navigating
+            Animated.timing(opacity, {
+                toValue: 0,  // Fade out
+                duration: 500, // Adjust the duration of the fade-out animation
+                useNativeDriver: true
+            }).start(() => {
+                // After the fade-out animation ends, reset navigation
+                navigation.reset({
+                    index: 0,  // resets the stack so that user cannot go back to this welcome screen
+                    routes: [{ name: 'PromptLoginSignUp' }],
+                });
             });
         });
     }, []);
@@ -41,6 +49,7 @@ const Welcome = () => {
             <Animated.View
                 style={[
                     {
+                        opacity,  // Apply fade-out effect here
                         transform: [
                             { scale },
                             {
@@ -54,7 +63,7 @@ const Welcome = () => {
                 ]}
             >
                 <Animated.Image
-                    style={{...styles.image }}
+                    style={styles.image}
                     source={require('./assets/finance.png')}
                 />
             </Animated.View>
