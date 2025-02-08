@@ -16,6 +16,8 @@ const Home = ({ route }) => {
   const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState("");
   const [borrowers, setBorrowers] = useState([]);
+  const [businessIdea, setBusinessIdea] = useState("")
+
 
   useEffect(() => {
     //REMOVE
@@ -42,6 +44,7 @@ const Home = ({ route }) => {
             email: borrower.email,
             password: borrower.password,
             businessName: borrower.businessName,
+            businessIdea: borrower.businessIdea,
             contributions: borrower.contributions,
             totalContributed: borrower.totalContributed,
             pendingLoans: borrower.pendingLoans,  
@@ -124,11 +127,15 @@ const Home = ({ route }) => {
   <TouchableOpacity style={styles.card} onPress={handleFlip}>
     {flipped ? (
       <View style={styles.cardContent}>
+        <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
+        <Text style={styles.businessIdea}>{borrowers[currentIndex].businessIdea}</Text>
+      </View>
+    ) : (
+      <View style={styles.cardContent}>
+        <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
         <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
         <Text style={styles.age}>{borrowers[currentIndex].email}</Text>
       </View>
-    ) : (
-      <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
     )}
   </TouchableOpacity>
 )}
@@ -174,7 +181,7 @@ const Home = ({ route }) => {
               keyboardType="numeric"
               value={loanAmount}
               onChangeText={setLoanAmount}
-              placeholderTextColor="#A9A9A9" // Dark Gray
+              placeholderTextColor="#A9A9A9"
             />
 
             <TextInput
@@ -183,7 +190,7 @@ const Home = ({ route }) => {
               keyboardType="numeric"
               value={percentageCut}
               onChangeText={setPercentageCut}
-              placeholderTextColor="#A9A9A9" // Dark Gray
+              placeholderTextColor="#A9A9A9"
             />
             {error ? (
                 <Text style={styles.errorText}>{error}</Text>
