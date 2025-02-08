@@ -10,6 +10,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import axios from 'axios';
+import {IP_ADDRESS} from '@env'
 
 
 const SignUp = ({ onLogin, ...props }) => {
@@ -47,7 +48,7 @@ const SignUp = ({ onLogin, ...props }) => {
         
         setErrorMessage(""); 
         console.log("creating user...");
-        axios.get(`http://192.168.12.221:8080/users/get?email=${email}`)
+        axios.get(`http://${IP_ADDRESS}:8080/users/get?email=${email}`)
             .then((response) => {
                 const userData = response.data;
                 if (userData) {
@@ -57,7 +58,7 @@ const SignUp = ({ onLogin, ...props }) => {
                 } else {
                     console.log("user doesn't exist");
                     // User not found, create a new user
-                    axios.post('http://192.168.12.221:8080/users/createUser', {
+                    axios.post(`http://${IP_ADDRESS}:8080/users/createUser`, {
                         email_address: email,
                         name: name,
                         password: password
@@ -76,7 +77,7 @@ const SignUp = ({ onLogin, ...props }) => {
             .catch((error) => {
                 console.log("user doesn't exist");
                     // User not found, create a new user
-                    axios.post('http://192.168.12.221:8080/users/createUser', {
+                    axios.post(`http://${IP_ADDRESS}:8080/users/createUser`, {
                         name: name,
                         email: email,
                         password: password
@@ -161,9 +162,6 @@ const SignUp = ({ onLogin, ...props }) => {
                             source={{uri: 'https://img.icons8.com/?size=100&id=17949&format=png&color=000000'}}
                             style={{width: 40, height: 40}}
                         />
-                    </View>
-                    <View style={[styles.icons, {backgroundColor: '#fffff7'}]}>
-                        <AntDesign name="apple1" size={35} color="black" />
                     </View>
                 </View>
                 <View style={styles.footerView}>
