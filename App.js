@@ -9,7 +9,7 @@ import Home from "./pages/home";
 import Login from "./pages/login.js";
 import Profile from "./pages/profile.js";
 import SignUp from "./pages/signUp.js";
-import Welcome from "./pages/Welcome.js";
+import Welcome from "./pages/welcome.js";
 
 const Stack = createStackNavigator();
 
