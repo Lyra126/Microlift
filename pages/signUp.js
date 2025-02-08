@@ -16,7 +16,6 @@ const SignUp = ({ onLogin, ...props }) => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -61,7 +60,6 @@ const SignUp = ({ onLogin, ...props }) => {
                     axios.post('http://192.168.12.221:8080/users/createUser', {
                         email_address: email,
                         name: name,
-                        username: name,
                         password: password
                     })
                     .then((response) => {
@@ -79,9 +77,8 @@ const SignUp = ({ onLogin, ...props }) => {
                 console.log("user doesn't exist");
                     // User not found, create a new user
                     axios.post('http://192.168.12.221:8080/users/createUser', {
-                        email_address: email,
-                        name: username,
-                        username: username,
+                        name: name,
+                        email: email,
                         password: password
                     })
                     .then((response) => {
