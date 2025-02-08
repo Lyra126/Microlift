@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const BorrowerSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true},
-    password: {type: String, required: true},
+    id: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true}, 
+    name: {type: String, required: true}, 
+    email: {type: String, required: true}, 
+    password: {type: String, required: true}, 
     phoneNumber: {type: String, required: false},
     businessName: {type: String, required: true},
     businessIdea: {type: String, required: true},
