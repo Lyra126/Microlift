@@ -1,118 +1,283 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, SafeAreaView, ImageBackground,TextInput, Pressable, Alert} from "react-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useNavigation} from "@react-navigation/native";
+import globalStyles from "./styles/globalStyles";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import axios from 'axios'; 
+import Navigation from "../Navigation"
+import Config from 'react-native-config';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import {useFonts} from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [secureText, setSecureText] = useState(true);
+const Login = ({ onLogin, ...props }) => {
+    const [fontsLoaded] = useFonts({
+        'Outfit-Regular': require('./fonts/Outfit/Outfit-Regular.ttf'),
+        'Outfit-Bold': require('./fonts/Outfit/Outfit-Bold.ttf'),
+        'Outfit-Black': require('./fonts/Outfit/Outfit-Black.ttf'),
+        'Outfit-Medium': require('./fonts/Outfit/Outfit-Medium.ttf'),
+        'Gabarito-Regular': require('./fonts/Gabarito/Gabarito-Regular.ttf'),
+        'Gabarito-Bold': require('./fonts/Gabarito/Gabarito-Bold.ttf'),
+    });
+    const navigation = useNavigation();
+    const [email,setEmail]=  useState("");
+    const [password,setPassword]=  useState("");
+    const [error, setError] = useState("");
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcomeText}>Welcome to MicroLift</Text>
+    useEffect(() => {
+        if (fontsLoaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Username or Email"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
+    if (!fontsLoaded) {
+        return null;
+    }
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={secureText}
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-        </TouchableOpacity>
-      </View>
 
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-      </TouchableOpacity>
+    const handleSignIn = () =>{
+        setError("");
+           
+        axios.get(`http://10.189.114.235:8081/users/getUser?email=${email}`)
+        .then((response) => {
+            const userData = response.data;
+            if (userData) {
+                // Login successful, will navigate user to the home page
+                onLogin(email);
+            }  else if (data.status === "fail") {
+                // Login failed
+                setError(data.message || "Incorrect email or password. Please try again.");
+            } else {
+                // Handle unexpected status
+                setError("Unexpected response. Please try again.");
+            }
+        })
+        .catch((error) => {
+            // Error handling
+            if (error.response) {
+                if (error.response.status === 404) {
+                    // Handle 404 not found
+                    setError("User not found. Please check your email and password.");
+                } else {
+                    // Handle other errors
+                    setError(`Error: ${error.response.data.message || "An issue occurred. Please try again later."}`);
+                }
+            } else {
+                // Handle network or other errors
+                console.error("Error signing in:", error);
+                setError("There was an issue signing in. Please try again later.");
+            }
+        });
 
-      <TouchableOpacity style={styles.loginButton}>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-      <Text style={styles.signUpText}>
-        Create An Account <Text style={styles.signUpLink}>Sign Up</Text>
-      </Text>
-    </View>
-  );
+      }
+
+    return (
+        <SafeAreaView  style={[globalStyles.AndroidSafeArea, styles.container]}>
+            <TouchableOpacity style={styles.backButton} onPress={() => {navigation.navigate('PromptLoginSignUp')}}>
+                <Ionicons name="arrow-back-circle-outline" size={50} color="#335727" style={{marginTop: 15}} />
+            </TouchableOpacity>
+            <View style = {styles.loginInformation}>
+            <Text style={styles.welcomeBack}>Welcome Back! </Text>
+            <Text style = {styles.welcomeText}>We're happy to see you again! </Text>
+                <View style={styles.inputView}>
+                    <View style={styles.inputSection}>
+                        <FontAwesome name="envelope" size={20} color="#000" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Email'
+                            placeholderTextColor='#888888'
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCorrect={false}
+                            autoCapitalize='none'
+                        />
+                    </View>
+                    <View style={styles.inputSection}>
+                        <Fontisto name="locked" size={22} color="#000" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Password'
+                            placeholderTextColor='#888888'
+                            secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
+                            autoCorrect={false}
+                            autoCapitalize='none'
+                        />
+                    </View>
+                </View>
+                {error ? (
+                    <Text style={styles.errorText}>{error}</Text>
+                ) : null}
+             <View style={styles.forgotPasswordView}>
+                    {/* change this to direct user to a forgot password page*/}
+                    <Pressable onPress={() => Alert.alert("Forget Password!")}>
+                        <Text style={styles.forgetText}>Forgot your password?</Text>
+                    </Pressable>
+             </View>
+
+            <View style={styles.buttonView}>
+                {/* change this to direct user to home page*/}
+                <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                    <Text style={styles.buttonText}>Sign In</Text>
+                </TouchableOpacity>
+                <View style={styles.optionsText}>
+                    <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
+                    <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 15, color: '#A9A9A9'}}>OR</Text>
+                    <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
+                </View>
+            </View>
+
+            <View style={styles.mediaIcons}>
+                <View style={[styles.icons, {backgroundColor: '#fffff7'}]}>
+                    <Image
+                        source={{uri: 'https://img.icons8.com/?size=100&id=17949&format=png&color=000000'}}
+                        style={{width: 40, height: 40}}
+                    />
+                </View>
+                <View style={[styles.icons, {backgroundColor: '#fffff7'}]}>
+                    <AntDesign name="apple1" size={35} color="black" />
+                </View>
+            </View>
+            <View style={styles.footerView}>
+                <Text style={styles.footerText}>Don't Have Account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={[styles.signup,{marginLeft: 3}]}> Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+            </View>
+        </SafeAreaView >
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
-  welcomeText: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    backgroundColor: "#f5f5f5",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginVertical: 10,
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    paddingHorizontal: 10,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    color: "#e63946",
-    marginBottom: 20,
-  },
-  loginButton: {
-    width: "100%",
-    backgroundColor: "#ff3b5c",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  loginText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  orText: {
-    marginVertical: 15,
-    color: "#999",
-  },
-  socialIcons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "60%",
-  },
-  iconImage: {
-    width: 50,
-    height: 50,
-  },
-  signUpText: {
-    marginTop: 20,
-    color: "#333",
-  },
-  signUpLink: {
-    color: "black",
-    fontWeight: "bold",
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#99c587',
+        padding: 40,
+    },
+    backButton: {
+        marginLeft: 20,
+    },
+    loginInformation: {
+       backgroundColor: '#e8efdd',
+        height: '100%',
+        borderRadius: 30,
+        paddingTop: 50,
+        marginTop: 70,
+        paddingHorizontal: 26
+    },
+    welcomeBack: {
+        fontFamily: 'Gabarito-Bold',
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    welcomeText: {
+        fontFamily: 'Outfit-Regular',
+        fontSize: 17,
+        color: 'gray',
+    },
+    image : {
+        height : 160,
+        width : 170
+    },
+    inputView : {
+        marginTop: 20,
+        gap : 18,
+        width : "100%",
+        marginBottom: 7
+    },
+    inputSection: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: '#fffff7',
+        borderRadius: 20,
+        paddingHorizontal: 20,
+    },
+    input: {
+        height : 50,
+        width : "80%",
+        paddingHorizontal : 20,
+        fontSize: 15,
+        backgroundColor: "#FFFFF7FF",
+        borderRadius: 20,
+        fontFamily: 'Outfit-Regular',
+    },
+    forgotPasswordView : {
+        marginTop: 10,
+        marginBottom : 40,
+        marginLeft: 10
+    },
+    forgetText : {
+        fontSize : 14.5,
+        color : "#335727",
+        fontFamily: 'Outfit-Regular',
+    },
+    button : {
+        backgroundColor : "#96c08e",
+        height : 45,
+        width : "100%",
+        borderRadius : 20,
+        alignItems : "center",
+        justifyContent : "center",
+    },
+    buttonText : {
+        color : "white"  ,
+        fontSize: 18,
+        fontWeight : "bold",
+        fontFamily: 'Gabarito-Bold',
+    },
+    buttonView :{
+        width :"100%",
+    },
+    optionsText : {
+        textAlign : "center",
+        color : "gray",
+        fontSize : 13,
+        marginVertical: 30,
+        flexDirection: 'row'
+    },
+    mediaIcons : {
+        flexDirection : "row",
+        gap : 22,
+        alignItems: "center",
+        justifyContent : "center",
+        marginBottom : 23,
+    },
+    icons : {
+        width : 55,
+        height: 55,
+        borderRadius : 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    footerView : {
+        flexDirection : "row",
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 20,
+    },
+    footerText : {
+        fontFamily: 'Outfit-Regular',
+        textAlign: "center",
+        color : "gray",
+    },
+    signup : {
+        color : "#517083",
+        textAlign: "center",
+        fontWeight : "bold",
+        fontFamily: 'Outfit-Bold',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
 });
 
 export default Login;
