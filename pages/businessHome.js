@@ -7,46 +7,120 @@ const BusinessHome = ({ route }) => {
   const [lenders, setLenders] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(null); 
   const [email, setEmail] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [pendingLoans, setPendingLoans] = useState([]);
+  const [lenderEmails, setLenderEmails] = useState([]);
 
 
     useEffect(() => {
       //REMOVE
+
       setEmail("alice@example.com")
       if (route.params) {
         const { email } = route.params;
         setEmail(email);
       }
-      fetchLenders();
-    }, [route.params]);
+      fetchPendingLoans();
+    }, [route.params, email]);
 
-  const fetchLenders = () => {
-    console.log("Fetching lenders...");
-    axios.get(`http://${IP_ADDRESS}:8080/appdata/getLenders`)
-      .then((response) => {
-        console.log("Response data:", response.data);
-        
-        if (response.data && response.data.length > 0) {
-          const lendersData = response.data.map(lender => ({
-            name: lender.name,
-            email: lender.email,
-            password: lender.password,
-            businessName: lender.businessName,
-            contributions: lender.contributions,
-            totalContributed: lender.totalContributed,
-            pendingLoans: lender.pendingLoans || [],  // Default to an empty array if not present
-            confirmedLoans: lender.confirmedLoans || [] // Default to an empty array if not present
-          }));
+    const fetchPendingLoans = async () => {
   
+      try {
+        // First axios call - fetching pending loans
+        const pendingLoansResponse = await axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowerByEmail?email=${email}`);
+        setPendingLoans(pendingLoansResponse.data.pendingLoans);
+        setBusinessName(pendingLoansResponse.data.businessName);
+    
+        const emails = pendingLoansResponse.data.pendingLoans.map(loan => loan.email);
+        setLenderEmails(emails);
+    
+        // Second axios call - fetching lenders only after the first call is done
+        const lendersResponse = await axios.get(`http://${IP_ADDRESS}:8080/appdata/getLenders`);
+    
+        const allEmails = lendersResponse.data.map(lender => lender.email);
+    
+        if (lendersResponse.data && lendersResponse.data.length > 0) {
+          const lendersData = lendersResponse.data
+            .filter(lender => lenderEmails.includes(lender.email))
+            .map(lender => {
+              // Filter pendingLoans based on businessName
+              const filteredLoans = lender.pendingLoans.filter(loan => loan.businessName === businessName);
+       
+              
+              // Map through the filtered loans to get the loan and cut values
+              const loanDetails = filteredLoans.map(loan => ({
+
+                loanAmount: loan.loan,  // Extract loan value
+                cut: loan.cut  // Extract cut value
+              }));
+             
+              loanDetails.forEach(loan => {
+                console.log(`Loan Amount: ${loan.loanAmount}, Cut: ${loan.cut}`);
+              });
+              const firstLoan = loanDetails[0] || {};
+              return {
+                name: lender.name,
+                email: lender.email,
+                password: lender.password,
+                businessName: lender.businessName,
+                contributions: lender.contributions,
+                totalContributed: lender.totalContributed,
+                pendingLoans: loanDetails,  // Set the extracted loan details
+                confirmedLoans: lender.confirmedLoans || [],  // Default to an empty array if not present
+                loanAmount: firstLoan.loanAmount || null,
+                cut: firstLoan.cut || null,
+              };
+            });
+
+    
+
           // Set the lenders state
           setLenders(lendersData);
         } else {
           console.log("No lenders found.");
         }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+  const acceptLoan = (email, businessName) => {
+    console.log(email);
+    console.log(businessName);
+    axios
+      .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderConfirmedLoans`, {
+          email: email,        // lender's email
+          businessName: businessName, // business name associated with the loan
+
+      })
+      .then((response) => {
+          console.log("Database updated:", response.data);
       })
       .catch((error) => {
-        console.error("Error fetching lenders:", error);
+          console.error("Error updating database for borrower", error);
       });
+
+      axios
+      .post(`http://${IP_ADDRESS}:8080/appdata/updateBorrowerConfirmedLoans`, {
+          email: email,        // lender's email
+          businessName: businessName, // business name associated with the loan
+      })
+      .then((response) => {
+          console.log("Database updated:", response.data);
+      })
+      .catch((error) => {
+          console.error("Error updating database for borrower", error);
+      });
+
+      setLenders((prevLenders) => {
+        return prevLenders.filter(
+          (lender) =>
+            !(lender.email === email && lender.businessName === businessName)
+        );
+      });
+
   };
+    
 
   const toggleExpansion = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -64,10 +138,12 @@ const BusinessHome = ({ route }) => {
         renderItem={({ item, index }) => (
           <View style={styles.profileContainer}>
             <View style={styles.profileHeader}>
-            <Image source={require('./assets/finance.png')} style={styles.profileImage} /> {/* to be replaced with company's profile photo*/}
+            <Image source={require('./assets/finance.png')} style={styles.profileImage} />
               <View style={styles.profileText}>
                 <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.company}>{item.businessName}</Text> {/* to be replaced with item.company */}
+                <Text style={styles.company}>{item.businessName}</Text> 
+                <Text style={styles.loanAmount}>Loan Amount: {item.loanAmount}</Text> 
+                <Text style={styles.cut}>Percentage Cut: {item.cut}</Text> 
               </View>
             </View>
            
@@ -76,10 +152,11 @@ const BusinessHome = ({ route }) => {
             <View style={styles.bioContainer}>
               <Text style={styles.bioTitle}>Description</Text>
               <Text style={styles.bioText}>{item.email || "No email available"}</Text>
+             
               <Text style={styles.bioText}>
-                Contributions: {item.contributions.length > 0 ? item.contributions.join(", ") : "No contributions available"}
+                Total Contributed: {item.totalContributed !== undefined ? item.totalContributed.toString() : "No amount available"}
               </Text>
-              <Text style={styles.bioText}>Total Contributed: {item.totalContributed || "No amount available"}</Text>
+
             </View>
 
 
@@ -119,7 +196,7 @@ const BusinessHome = ({ route }) => {
                 </View>
               </>
             )}
-            <TouchableOpacity style={styles.acceptButton}>
+            <TouchableOpacity style={styles.acceptButton} onPress={() => acceptLoan(item.email, businessName)}>
               <Text style={styles.acceptButtonText}>Accept</Text>
             </TouchableOpacity>
           </View>

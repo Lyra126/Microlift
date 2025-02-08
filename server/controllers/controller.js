@@ -109,6 +109,78 @@ const updateBorrowerPendingLoans = async (req, res) => {
     }
 };
 
+const updateLenderConfirmedLoans = async (req, res) => {
+    try {
+        const { email, businessName } = req.body;
+
+        // Find the lender by email
+        const lender = await LenderModel.findOne({ email });
+        if (!lender) {
+            return res.status(404).json({ error: 'Lender not found' });
+        }
+
+        // Find the loan object in pendingLoans that matches the given businessName
+        const loanIndex = lender.pendingLoans.findIndex(loan => loan.businessName === businessName);
+
+        if (loanIndex === -1) {
+            return res.status(404).json({ error: 'Loan with the specified business name not found' });
+        }
+
+        // Extract the loan to be moved to confirmedLoans
+        const loanToMove = lender.pendingLoans[loanIndex];
+
+        // Remove the loan from pendingLoans
+        lender.pendingLoans.splice(loanIndex, 1);
+
+        // Push the loan to confirmedLoans
+        lender.confirmedLoans.push(loanToMove);
+
+        // Save the updated lender back to the database
+        await lender.save();
+
+        res.json(lender);
+    } catch (error) {
+        // Handle any errors
+        res.status(500).json({ error: 'Failed to update lender loans' });
+    }
+};
+
+const updateBorrowerConfirmedLoans = async (req, res) => {
+    try {
+        const { lenderEmail, businessName } = req.body;
+
+        // Find the borrower by business name
+        const borrower = await BorrowerModel.findOne({ businessName });
+        if (!borrower) {
+            return res.status(404).json({ error: 'Borrower not found' });
+        }
+
+        // Find the loan object in pendingLoans that matches the given lender's email
+        const loanIndex = borrower.pendingLoans.findIndex(loan => loan.lenderEmail === lenderEmail);
+
+        if (loanIndex === -1) {
+            return res.status(404).json({ error: 'Loan with the specified lender email not found' });
+        }
+
+        // Extract the loan to be moved to confirmedLoans
+        const loanToMove = borrower.pendingLoans[loanIndex];
+
+        // Remove the loan from pendingLoans
+        borrower.pendingLoans.splice(loanIndex, 1);
+
+        // Push the loan to confirmedLoans
+        borrower.confirmedLoans.push(loanToMove);
+
+        // Save the updated borrower back to the database
+        await borrower.save();
+
+        res.json(borrower);
+    } catch (error) {
+        // Handle any errors
+        res.status(500).json({ error: 'Failed to update borrower loans' });
+    }
+};
+
 
 
 
@@ -131,5 +203,7 @@ export{
     getLenderByEmail,
     getBorrowerByEmail,
     updateLenderPendingLoans,
-    updateBorrowerPendingLoans
+    updateBorrowerPendingLoans,
+    updateLenderConfirmedLoans,
+    updateBorrowerConfirmedLoans
 }

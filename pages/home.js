@@ -29,7 +29,7 @@ const Home = ({ route }) => {
 
   useEffect(() => {
     //REMOVE
-    setEmail("john@example.com")
+    setEmail("emily@example.com")
     setBusinessName("Alice's Bakery")
     if (route.params) {
       const { email } = route.params;
