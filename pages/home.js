@@ -17,11 +17,11 @@ const Home = ({ route }) => {
 
   useEffect(() => {
     //REMOVE
-    setEmail("john@example.com");
-    setBusinessName("Alice's Bakery");
-  
-    if (route.params && route.params.email) {
-      setEmail(route.params.email);
+    setEmail("emily@example.com")
+    setBusinessName("Alice's Bakery")
+    if (route.params) {
+      const { email } = route.params;
+      setEmail(email);
     }
   
     fetchbBorrowers();

@@ -62,8 +62,6 @@ const App = () => {
     );
 };
 
-export default App;
-
 
 // import React from 'react';
 // import { View, Text } from 'react-native';
@@ -93,4 +91,5 @@ export default App;
 //   );
 // };
 
-// export default App;
+
+export default App;

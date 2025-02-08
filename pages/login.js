@@ -120,7 +120,7 @@ const Login = ({ onLogin, ...props }) => {
 
             <View style={styles.buttonView}>
                 {/* change this to direct user to home page*/}
-                <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                <TouchableOpacity style={styles.button} onPress={() => handleSignIn}>
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
                 <View style={styles.optionsText}>
