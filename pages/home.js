@@ -12,6 +12,8 @@ const Home = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loanAmount, setLoanAmount] = useState("");
   const [percentageCut, setPercentageCut] = useState("");
+  const [email, setEmail] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState("");
   const [borrowers, setBorrowers] = useState([]);
 
@@ -27,8 +29,6 @@ const Home = ({ route }) => {
     fetchbBorrowers();
   }, [route.params]);
 
-
-  console.log("IP_ADDRESS:", IP_ADDRESS);
 
   //something here is broken
   const fetchbBorrowers = () => {
@@ -163,7 +163,7 @@ const Home = ({ route }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Lend to {borrowers[currentIndex].name}</Text>
+            {/* <Text style={styles.modalTitle}>Lend to {borrowers[currentIndex].name}</Text> */}
 
             <TextInput
               placeholder="Enter loan amount"
