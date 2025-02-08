@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,7 +8,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcomeText}>Welcome</Text>
+      <Text style={styles.welcomeText}>Welcome to MicroLift</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -77,12 +77,12 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     alignSelf: "flex-end",
-    color: "#00000",
+    color: "#e63946",
     marginBottom: 20,
   },
   loginButton: {
     width: "100%",
-    backgroundColor: "#000000",
+    backgroundColor: "#ff3b5c",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -107,10 +107,10 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     marginTop: 20,
-    color: "#00000",
+    color: "#333",
   },
   signUpLink: {
-    color: "#00000",
+    color: "black",
     fontWeight: "bold",
   },
 });
