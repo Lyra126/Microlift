@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const Profile = () => {
   const userData = {
-    profileImage: 'temp image', // put an actual image eventually
+    profileImage: 'temp', // put an actual image eventually
     name: "John Doe",
     company: "Temporary Company",
     verification: "Verified",
