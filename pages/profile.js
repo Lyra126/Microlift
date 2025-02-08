@@ -23,13 +23,12 @@ const Profile = () => {
     targetGoal: "100 loans per year"
   });
 
-  // Fetch user data from the API
   useEffect(() => {
     axios
       .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${globalState.email}`)
       .then((response) => {
         const requestData = response.data;
-        // Update the userData state correctly by spreading the previous state
+        // updates with global context / current user
         setUserData(prevData => ({
           ...prevData,
           name: requestData.name,

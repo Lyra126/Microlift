@@ -5,8 +5,8 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [globalState, setGlobalState] = useState({
-    email: null,  // Initially set to null
-    type: null,   // Initially set to null (true for borrower, false for lender)
+    email: null, // set to email
+    type: null, // true - borrower, false - lender
   });
 
   return (
@@ -16,5 +16,5 @@ export const GlobalProvider = ({ children }) => {
   );
 };
 
-// Custom hook to access the global state and setter
+// to access the global state and setter
 export const useGlobal = () => useContext(GlobalContext);

@@ -51,9 +51,9 @@ const Login = ({ onLogin, ...props }) => {
               console.log(userData.email);
               if (userData && userData.password === password) {
                   // Login successful, navigate to the home page or trigger onLogin
-                  setGlobalState({
-                    email: userData.email,  // Store the email in global state
-                    type: userData.type,    // Store the type (borrower/lender) in global state
+                  setGlobalState({ // stores email/type in global state
+                    email: userData.email,
+                    type: userData.type, 
                   });
                   onLogin(email); // Handle login state change here
               } else {
