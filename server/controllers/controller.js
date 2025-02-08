@@ -21,6 +21,7 @@ const getBorrowers = async (req, res) => {
     }
 };
 
+
 const getLenderByEmail = async (req, res) => {
     try {
         const { email } = req.query;

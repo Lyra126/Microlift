@@ -27,7 +27,7 @@ const Home = ({ route }) => {
     }
   
     fetchbBorrowers();
-  }, [route.params]);
+  }, [route.params, email, businessName]);
 
 
   //something here is broken
