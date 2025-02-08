@@ -1,9 +1,12 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 
 const Profile = () => {
-  const userData = {
-    profileImage: 'temp', // put an actual image eventually
+  const [editing, setEditing] = useState(false);
+  // temp data - to be set to whoever is logged in
+  // TODO: needs to interact with database
+  const [userData, setUserData] = useState({
+    profileImage: require('./assets/finance.png'), // put an actual image eventually
     name: "John Doe",
     company: "Temporary Company",
     verification: "Verified",
@@ -11,58 +14,117 @@ const Profile = () => {
     goals: "Help borrowers achieve financial independence.",
     maxAmount: "$50,000",
     targetGoal: "100 loans per year"
+  });
+
+  {/* supports editing profile - TODO: update database */}
+  const handleEditChange = (field, value) => {
+    setUserData(prevData => ({
+      ...prevData,
+      [field]: value
+    }));
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
-        <Text style={styles.backText}>←</Text>
-      </TouchableOpacity>
+    <KeyboardAvoidingView 
+      style={{ flex: 1 }} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.backButton}>
+            <Text style={styles.backText}>←</Text>
+          </TouchableOpacity>
 
-      <View style={styles.profileContainer}>
-        <View style={styles.profileHeader}>
-          <Image source={{ uri: userData.profileImage }} style={styles.profileImage} />
-          <View style={styles.profileText}>
-            <Text style={styles.name}>{userData.name}</Text>
-            <Text style={styles.company}>{userData.company}</Text>
+          {/* simple display of basic profile info */}
+          <View style={styles.profileContainer}>
+            <View style={styles.profileHeader}>
+              <Image source={userData.profileImage} style={styles.profileImage} />
+              <View style={styles.profileText}>
+                {/* name and company cannot be edited */}
+                <Text style={styles.name}>{userData.name}</Text>
+                <Text style={styles.company}>{userData.company}</Text>
+              </View>
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Verification</Text>
+              <Text style={styles.bioText}>{userData.verification}</Text>
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Description of Lender</Text>
+              {editing ? (
+                <TextInput
+                  style={styles.bioTextInput}
+                  value={userData.description}
+                  onChangeText={text => handleEditChange('description', text)}
+                />
+              ) : (
+                <Text style={styles.bioText}>{userData.description}</Text>
+              )}
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Company</Text>
+              {editing ? (
+                <TextInput
+                  style={styles.bioTextInput}
+                  value={userData.company}
+                  onChangeText={text => handleEditChange('company', text)}
+                />
+              ) : (
+                <Text style={styles.bioText}>{userData.company}</Text>
+              )}
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Goals</Text>
+              {editing ? (
+                <TextInput
+                  style={styles.bioTextInput}
+                  value={userData.goals}
+                  onChangeText={text => handleEditChange('goals', text)}
+                />
+              ) : (
+                <Text style={styles.bioText}>{userData.goals}</Text>
+              )}
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Maximum Amount Willing to Lend</Text>
+              {editing ? (
+                <TextInput
+                  style={styles.bioTextInput}
+                  value={userData.maxAmount}
+                  onChangeText={text => handleEditChange('maxAmount', text)}
+                />
+              ) : (
+                <Text style={styles.bioText}>{userData.maxAmount}</Text>
+              )}
+            </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Target Goal</Text>
+              {editing ? (
+                <TextInput
+                  style={styles.bioTextInput}
+                  value={userData.targetGoal}
+                  onChangeText={text => handleEditChange('targetGoal', text)}
+                />
+              ) : (
+                <Text style={styles.bioText}>{userData.targetGoal}</Text>
+              )}
+            </View>
+
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => setEditing(!editing)}
+            >
+              <Text style={styles.editButtonText}>{editing ? 'Save' : 'Edit'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Verification</Text>
-          <Text style={styles.bioText}>{userData.verification}</Text>
-        </View>
-
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Description of Lender</Text>
-          <Text style={styles.bioText}>{userData.description}</Text>
-        </View>
-
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Company</Text>
-          <Text style={styles.bioText}>{userData.company}</Text>
-        </View>
-
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Goals</Text>
-          <Text style={styles.bioText}>{userData.goals}</Text>
-        </View>
-
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Maximum Amount Willing to Lend</Text>
-          <Text style={styles.bioText}>{userData.maxAmount}</Text>
-        </View>
-
-        <View style={styles.bioContainer}>
-          <Text style={styles.bioTitle}>Target Goal</Text>
-          <Text style={styles.bioText}>{userData.targetGoal}</Text>
-        </View>
-
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -130,6 +192,21 @@ const styles = StyleSheet.create({
   bioText: {
     fontSize: 14,
     color: "#333",
+  },
+  bioTextInput: {
+    fontSize: 14,
+    color: "#333",
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 5,
+  },
+  nameInput: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: "#2C6E49",
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 5,
   },
   editButton: {
     backgroundColor: "#A5D6A7", 
