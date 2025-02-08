@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
+import { IP_ADDRESS } from '@env';
+import axios from 'axios';
 
-const businessHome = () => {
-  const bioData = Array(5).fill({
-    profileImage: '', // placeholder
-    name: "John Doe",
-    company: "Temporary Company",
-    verification: "Verified",
-    description: "An experienced lender in the financial industry.",
-    goals: "Help borrowers achieve financial independence.",
-    maxAmount: "$50,000",
-    targetGoal: "100 loans per year"
-  });
+const BusinessHome = () => {
+  const [users, setUsers] = useState([]);
+  const [expandedIndex, setExpandedIndex] = useState(null); 
 
-  const [expandedIndex, setExpandedIndex] = useState(null);
+  useEffect(() => {
+    fetchUsers();
+  }, []); 
+
+  const fetchUsers = () => {
+    console.log("Fetching users...");
+    axios.get(`http://${IP_ADDRESS}:8080/users/getAll`)
+      .then((response) => {
+        console.log("Response data:", response.data);
+        if (response.data && response.data.length > 0) {
+          setUsers(response.data); 
+        } else {
+          console.log("No users found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  };
 
   const toggleExpansion = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -26,59 +38,63 @@ const businessHome = () => {
       </TouchableOpacity>
 
       <FlatList
-        data={bioData}
+        data={users}  
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.profileContainer}>
             <View style={styles.profileHeader}>
-              <Image source={{ uri: item.profileImage }} style={styles.profileImage} />
+            <Image source={require('./assets/finance.png')} style={styles.profileImage} /> {/* to be replaced with company's profile photo*/}
               <View style={styles.profileText}>
                 <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.company}>{item.company}</Text>
+                <Text style={styles.company}>Test Company</Text> {/* to be replaced with item.company */}
               </View>
             </View>
 
+            {/* base info that every business owner sees */}
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Description</Text>
+              <Text style={styles.bioText}>{item.email || "No description available"}</Text>
+            </View>
+
+            {/* toggles extra details */}
             <TouchableOpacity onPress={() => toggleExpansion(index)} style={styles.toggleButton}>
-              <Text style={styles.toggleButtonText}>{expandedIndex === index ? "Hide Details" : "Show Details"}</Text>
+              <Text style={styles.toggleButtonText}>
+                {expandedIndex === index ? "Hide Details" : "Show Details"}
+              </Text>
             </TouchableOpacity>
 
+            {/* extra details if expanded -- TODO: INTEGRATE CORRECTLY WITH DATABASE */}
             {expandedIndex === index && (
               <>
                 <View style={styles.bioContainer}>
                   <Text style={styles.bioTitle}>Verification</Text>
-                  <Text style={styles.bioText}>{item.verification}</Text>
+                  <Text style={styles.bioText}>{item.verification || "Not Verified"}</Text>
                 </View>
 
                 <View style={styles.bioContainer}>
                   <Text style={styles.bioTitle}>Description of Lender</Text>
-                  <Text style={styles.bioText}>{item.description}</Text>
-                </View>
-
-                <View style={styles.bioContainer}>
-                  <Text style={styles.bioTitle}>Company</Text>
-                  <Text style={styles.bioText}>{item.company}</Text>
+                  <Text style={styles.bioText}>{item.description || "No description available"}</Text>
                 </View>
 
                 <View style={styles.bioContainer}>
                   <Text style={styles.bioTitle}>Goals</Text>
-                  <Text style={styles.bioText}>{item.goals}</Text>
+                  <Text style={styles.bioText}>{item.goals || "No goals defined"}</Text>
                 </View>
 
                 <View style={styles.bioContainer}>
                   <Text style={styles.bioTitle}>Maximum Amount Willing to Lend</Text>
-                  <Text style={styles.bioText}>{item.maxAmount}</Text>
+                  <Text style={styles.bioText}>{item.maxAmount || "$0"}</Text>
                 </View>
 
                 <View style={styles.bioContainer}>
                   <Text style={styles.bioTitle}>Target Goal</Text>
-                  <Text style={styles.bioText}>{item.targetGoal}</Text>
+                  <Text style={styles.bioText}>{item.targetGoal || "No target set"}</Text>
                 </View>
-
-                <TouchableOpacity style={styles.acceptButton}>
-                  <Text style={styles.acceptButtonText}>Accept</Text>
-                </TouchableOpacity>
               </>
             )}
+            <TouchableOpacity style={styles.acceptButton}>
+              <Text style={styles.acceptButtonText}>Accept</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -182,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default businessHome;
+export default BusinessHome;
