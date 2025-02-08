@@ -5,10 +5,6 @@ import axios from 'axios';
 import {IP_ADDRESS} from '@env'
 
 const { width } = Dimensions.get("window");
-const users = [
-  { id: 1, name: "Alice", age: 22, image: require("../pages/assets/cake.jpg") },
-  { id: 2, name: "Bob", age: 25, image: require("../pages/assets/finance.png") },
-];
 
 const Home = ({ route }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,37 +13,64 @@ const Home = ({ route }) => {
   const [loanAmount, setLoanAmount] = useState("");
   const [percentageCut, setPercentageCut] = useState("");
   const [error, setError] = useState("");
-  const [email, setEmail] = useState("");
-  const [businessName, setBusinessName] = useState("");
-
-  const handleFlip = () => setFlipped(!flipped);
-
-  const handleNextUser = () => {
-    setFlipped(false);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
-  };
+  const [borrowers, setBorrowers] = useState([]);
 
   useEffect(() => {
     //REMOVE
-    setEmail("john@example.com")
-    setBusinessName("Alice's Bakery")
-    if (route.params) {
-      const { email } = route.params;
-      setEmail(email);
+    setEmail("john@example.com");
+    setBusinessName("Alice's Bakery");
+  
+    if (route.params && route.params.email) {
+      setEmail(route.params.email);
     }
+  
+    fetchbBorrowers();
   }, [route.params]);
 
+
+  console.log("IP_ADDRESS:", IP_ADDRESS);
+
+  const fetchbBorrowers = () => {
+    console.log("Fetching lenders...");
+    axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowers`)
+      .then((response) => {
+        console.log("Response data:", response.data);
+        
+        if (response.data && response.data.length > 0) {
+          const borrowersData = response.data.map(borrower => ({
+            name: borrower.name, 
+            email: borrower.email,
+            password: borrower.password,
+            businessName: borrower.businessName,
+            contributions: borrower.contributions,
+            totalContributed: borrower.totalContributed,
+            pendingLoans: borrower.pendingLoans,  
+            confirmedLoans: borrower.confirmedLoans 
+          }));
+  
+          setBorrowers(borrowersData);
+        } else {
+          console.log("No borrowers found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching borrowers:", error);
+      });
+  };
+
   const updateDatabase = (loanAmount, percentageCut) => {
-    axios
+      axios
       .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderPendingLoans`, {
           email: email,        // lender's email
           businessName: businessName, // business name associated with the loan
           loan: loanAmount, // loan amount
           cut: percentageCut, // cut percentage
       })
+
       .then((response) => {
-          console.log("Database updated:", response.data);
+        console.log("Database updated:", response.data);
       })
+      
       .catch((error) => {
           console.error("Error updating database for lender", error);
       });
@@ -59,6 +82,7 @@ const Home = ({ route }) => {
           loan: loanAmount, // loan amount
           cut: percentageCut, // cut percentage
       })
+
       .then((response) => {
           console.log("Database updated:", response.data);
       })
@@ -86,18 +110,29 @@ const Home = ({ route }) => {
     setError("");
   };
 
+  const handleFlip = () => setFlipped(!flipped);
+
+  const handleNextUser = () => {
+    if (borrowers.length === 0) return;
+    setFlipped(false);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % borrowers.length);
+  };  
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.card} onPress={handleFlip}>
-        {flipped ? (
-          <View style={styles.cardContent}>
-            <Text style={styles.name}>{users[currentIndex].name}</Text>
-            <Text style={styles.age}>{users[currentIndex].age} years old</Text>
-          </View>
-        ) : (
-          <Image source={users[currentIndex].image} style={styles.image} />
-        )}
-      </TouchableOpacity>
+      {borrowers.length > 0 && (
+  <TouchableOpacity style={styles.card} onPress={handleFlip}>
+    {flipped ? (
+      <View style={styles.cardContent}>
+        <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
+        <Text style={styles.age}>{borrowers[currentIndex].email}</Text>
+      </View>
+    ) : (
+      <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
+    )}
+  </TouchableOpacity>
+)}
+
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -118,6 +153,7 @@ const Home = ({ route }) => {
         </TouchableOpacity>
       </View>
 
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -126,7 +162,7 @@ const Home = ({ route }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Lend to {users[currentIndex].name}</Text>
+            <Text style={styles.modalTitle}>Lend to {borrowers[currentIndex].name}</Text>
 
             <TextInput
               placeholder="Enter loan amount"
