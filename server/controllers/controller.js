@@ -55,7 +55,7 @@ const getBorrowerByEmail = async (req, res) => {
     }
 };
 
-const updateLenderLoans = async (req, res) => {
+const updateLenderPendingLoans = async (req, res) => {
     try {
         const {email, businessName, loan, cut } = req.body;
 
@@ -82,6 +82,34 @@ const updateLenderLoans = async (req, res) => {
     }
 };
 
+const updateBorrowerPendingLoans = async (req, res) => {
+    try {
+        const {email, businessName, loan, cut } = req.body;
+
+        const borrower = await BorrowerModel.findOne({ businessName });
+        const newLoan = {
+            email,
+            loan,
+            cut
+        };
+
+        // Push the new loan tuple to the pendingLoans array
+        borrower.pendingLoans.push(newLoan);
+
+        // Save the updated borrower back to the database
+        await borrower.save();
+        if (!borrower) {
+            return res.status(404).json({ error: 'Borrower not found' });
+        }
+    
+        res.json(borrower);
+    } catch (error) {
+        // Handle any errors
+        res.status(500).json({ error: 'Failed to fetch borrower' });
+    }
+};
+
+
 
 
 const createLender = async (req, res) => {
@@ -102,5 +130,6 @@ export{
     getPersonById,
     getLenderByEmail,
     getBorrowerByEmail,
-    updateLenderLoans
+    updateLenderPendingLoans,
+    updateBorrowerPendingLoans
 }

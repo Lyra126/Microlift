@@ -30,7 +30,7 @@ const Home = ({ route }) => {
   useEffect(() => {
     //REMOVE
     setEmail("john@example.com")
-    setBusinessName("Lucy Bakery")
+    setBusinessName("Alice's Bakery")
     if (route.params) {
       const { email } = route.params;
       setEmail(email);
@@ -38,10 +38,8 @@ const Home = ({ route }) => {
   }, [route.params]);
 
   const updateDatabase = (loanAmount, percentageCut) => {
-    
-    
     axios
-      .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderLoans`, {
+      .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderPendingLoans`, {
           email: email,        // lender's email
           businessName: businessName, // business name associated with the loan
           loan: loanAmount, // loan amount
@@ -51,7 +49,21 @@ const Home = ({ route }) => {
           console.log("Database updated:", response.data);
       })
       .catch((error) => {
-          console.error("Error updating database", error);
+          console.error("Error updating database for lender", error);
+      });
+
+      axios
+      .post(`http://${IP_ADDRESS}:8080/appdata/updateBorrowerPendingLoans`, {
+          email: email,        // lender's email
+          businessName: businessName, // business name associated with the loan
+          loan: loanAmount, // loan amount
+          cut: percentageCut, // cut percentage
+      })
+      .then((response) => {
+          console.log("Database updated:", response.data);
+      })
+      .catch((error) => {
+          console.error("Error updating database for borrower", error);
       });
   };
 

@@ -3,13 +3,21 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from 'react
 import { IP_ADDRESS } from '@env';
 import axios from 'axios';
 
-const BusinessHome = () => {
+const BusinessHome = ({ route }) => {
   const [lenders, setLenders] = useState([]);
   const [expandedIndex, setExpandedIndex] = useState(null); 
+  const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    fetchLenders();
-  }, []); 
+
+    useEffect(() => {
+      //REMOVE
+      setEmail("alice@example.com")
+      if (route.params) {
+        const { email } = route.params;
+        setEmail(email);
+      }
+      fetchLenders();
+    }, [route.params]);
 
   const fetchLenders = () => {
     console.log("Fetching lenders...");
