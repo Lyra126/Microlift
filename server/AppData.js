@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './mongodb/connect.js';
 import router from './routes/routes.js'
 import userRouter from './routes/user.routes.js'
+import authRouter from './routes/auth.routes.js'
 
 dotenv.config();
 
@@ -23,6 +24,9 @@ app.get('/', (req,res) => {
 app.use('/appdata', router);
 
 app.use('/users', userRouter);
+
+app.use('/auth', authRouter)
+
 
 const startServer = async () => {
     try{
