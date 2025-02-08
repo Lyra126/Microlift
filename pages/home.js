@@ -30,6 +30,7 @@ const Home = ({ route }) => {
 
   console.log("IP_ADDRESS:", IP_ADDRESS);
 
+  //something here is broken
   const fetchbBorrowers = () => {
     console.log("Fetching lenders...");
     axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowers`)
