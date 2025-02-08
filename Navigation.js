@@ -15,10 +15,10 @@ function TabGroup(){
     return(
         <Tab.Navigator screenOptions={{ headerShown: false }}>
             <Tab.Screen name="Home" component={Home}/>
-            <Tab.Screen name="Login" component={Login}/>
+            {/* <Tab.Screen name="Login" component={Login}/> */}
             <Tab.Screen name="Profile" component={Profile}/>
-            <Tab.Screen name="SignUp" component={SignUp}/>
-            <Tab.Screen name="Welcome" component={Welcome}/>
+            {/* <Tab.Screen name="SignUp" component={SignUp}/>
+            <Tab.Screen name="Welcome" component={Welcome}/> */}
         </Tab.Navigator>
     )
 }
