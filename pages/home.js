@@ -1,50 +1,49 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
-import Swiper from "react-native-deck-swiper";
 import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
-
 const users = [
   { id: 1, name: "Alice", age: 22, image: require("../pages/assets/cake.jpg") },
+  { id: 2, name: "Bob", age: 25, image: require("../pages/assets/finance.png") },
 ];
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+
+  const handleFlip = () => setFlipped(!flipped);
+
+  const handleNextUser = () => {
+    setFlipped(false);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.swiperContainer}>
-        <Swiper
-          cards={users}
-          renderCard={(card) => (
-            <View style={styles.card}>
-              <Image source={card.image} style={styles.image} />
-              <Text style={styles.name}>{card.name}, {card.age}</Text>
-            </View>
-          )}
-          onSwiped={(index) => setCurrentIndex(index + 1)}
-          onSwipedAll={() => console.log("No more profiles")}
-          cardIndex={currentIndex}
-          backgroundColor="transparent"
-          stackSize={3}
-          containerStyle={{ alignItems: "center" }}
-        />
-      </View>
-
-      {/* Buttons for Like and Dislike */}
+      <TouchableOpacity style={styles.card} onPress={handleFlip}>
+        {flipped ? (
+          <View style={styles.cardContent}>
+            <Text style={styles.name}>{users[currentIndex].name}</Text>
+            <Text style={styles.age}>{users[currentIndex].age} years old</Text>
+          </View>
+        ) : (
+          <Image source={users[currentIndex].image} style={styles.image} />
+        )}
+      </TouchableOpacity>
+      
       <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={[styles.button, styles.dislikeButton]} 
-          onPress={() => console.log("Disliked")}
-        >
+      <TouchableOpacity style={[styles.button, styles.dislikeButton]} onPress={() => {
+        handleNextUser(); 
+        console.log("Disliked");
+      }}>
           <Ionicons name="close" size={32} color="white" />
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={[styles.button, styles.likeButton]} 
-          onPress={() => console.log("Liked")}
-        >
+        <TouchableOpacity style={[styles.button, styles.likeButton]} onPress={() => {
+        handleNextUser(); 
+        console.log("Liked");
+      }}>
           <Ionicons name="heart" size={32} color="white" />
         </TouchableOpacity>
       </View>
@@ -56,23 +55,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingBottom: 50,
-  },
-  swiperWrapper: {
-    flex: 3, 
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    marginTop: -50, 
-  },
-  swiperContainer: {
-    alignItems: "center", 
-    justifyContent: "center", 
-    width: "100%",
   },
   card: {
-    width: width * 0.85, 
-    height: 420, 
+    width: width * 0.85,
+    height: 420,
     borderRadius: 12,
     backgroundColor: "#fff",
     alignItems: "center",
@@ -81,26 +69,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    alignSelf: "center", 
+  },
+  cardContent: {
+    alignItems: "center",
   },
   image: {
     width: "100%",
-    height: "80%",
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    height: "100%",
+    borderRadius: 12,
   },
   name: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#333",
-    marginTop: 12,
+  },
+  age: {
+    fontSize: 18,
+    color: "#666",
   },
   buttonContainer: {
-    flex: 1,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
+    marginTop: 20,
   },
   button: {
     width: 70,
