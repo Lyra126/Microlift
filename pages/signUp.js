@@ -16,6 +16,8 @@ import {IP_ADDRESS} from '@env'
 const SignUp = ({ onLogin, ...props }) => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
+    // false = lender
+    const [type, setType] = useState(null);
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -41,7 +43,7 @@ const SignUp = ({ onLogin, ...props }) => {
 
 
     const handleSubmit = () => {
-        if (!name || !email || !password) {
+        if (type === null || !name || !email || !password) {
             setErrorMessage("All fields are required.");
             return;
         }
@@ -59,6 +61,7 @@ const SignUp = ({ onLogin, ...props }) => {
                     console.log("user doesn't exist");
                     // User not found, create a new user
                     axios.post(`http://${IP_ADDRESS}:8080/users/createUser`, {
+                        type: type,
                         email_address: email,
                         name: name,
                         password: password
@@ -78,6 +81,7 @@ const SignUp = ({ onLogin, ...props }) => {
                 console.log("user doesn't exist");
                     // User not found, create a new user
                     axios.post(`http://${IP_ADDRESS}:8080/users/createUser`, {
+                        type: type,
                         name: name,
                         email: email,
                         password: password
@@ -103,6 +107,27 @@ const SignUp = ({ onLogin, ...props }) => {
                 <Text style={styles.welcomeBack}>Begin Your Journey</Text>
                 <Text style = {styles.welcomeText}>Just a few more steps to join our community</Text>
                 <View style={styles.inputView}>
+                    <View style={styles.inputSection}>
+                        <Ionicons name="options" size={20} color="#000" />
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginLeft: 10 }}>
+                            <TouchableOpacity 
+                                style={[styles.button, { flex: 1, marginRight: 5 }, type === false && { backgroundColor: '#007bff' }]}  
+                                onPress={() => {setType(false);
+                                    console.log("Selected Type: ", type);
+                                }}
+                            >
+                                <Text style={[styles.buttonText, type === false && { color: '#fff' }]}>Lender</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={[styles.button, { flex: 1, marginRight: 5 }, type === true && { backgroundColor: '#007bff' }]} 
+                                onPress={() => {setType(true);
+                                    console.log("Selected Type: ", type);
+                                }}
+                            >
+                                <Text style={[styles.buttonText, type === true && { color: '#fff' }]}>Borrower</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     <View style={styles.inputSection}>
                         <Ionicons name="person" size={20} color="#000" />
                         <TextInput

@@ -26,10 +26,11 @@ const getUserByEmailAndPassword = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const {email, name, password } = req.body;
+        const {type, email, name, password } = req.body;
         
         // Create a new user instance
         const user = new UserModel({ 
+            type,
             name,
             email,
             password
