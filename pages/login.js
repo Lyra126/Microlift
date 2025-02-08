@@ -41,30 +41,42 @@ const Login = ({ onLogin, ...props }) => {
 
 
     const handleSignIn = () => {
-      setError("");  // Reset any previous error
+      console.log(email);
+        setError("");  // Reset any previous error
+      
       axios
-        .post(`http://${IP_ADDRESS}:8080/auth/login`, {
-            email,
-            password,
-        })
-        .then((response) => {
-            console.log("Login successful:", response.data);
-
-            // If login is successful, trigger the login state change
-            onLogin(email); 
-        })
-        .catch((error) => {
-            if (error.response) {
-                if (error.response.status === 401) {
-                    setError("Incorrect email or password. Please try again.");
-                } else {
-                    setError(`Error: ${error.response.data.message || "An issue occurred. Please try again later."}`);
-                }
-            } else {
-                console.error("Network error:", error);
-                setError("Network error. Please check your connection and try again.");
-            }
-        });
+          .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${email}`)
+          .then((response) => {
+              const userData = response.data;
+              console.log(userData.email);
+              if (userData && userData.password === password) {
+                  // Login successful, navigate to the home page or trigger onLogin
+                  setGlobalState({ // stores email/type in global state
+                    email: userData.email,
+                    type: userData.type, 
+                  });
+                  onLogin(email); // Handle login state change here
+              } else {
+                  // If user is not found or any other issue
+                  setError("Incorrect email or password. Please try again.");
+              }
+          })
+          .catch((error) => {
+              // Error handling for any network issues or 404
+              if (error.response) {
+                  if (error.response.status === 404) {
+                      // Handle user not found
+                      setError("User not found. Please check your email and password.");
+                  } else {
+                      // Handle other types of errors
+                      setError(`Error: ${error.response.data.message || "An issue occurred. Please try again later."}`);
+                  }
+              } else {
+                  // Handle network or unexpected errors
+                  console.error("Error signing in:", error);
+                  setError("There was an issue signing in. Please try again later.");
+              }
+          });
     };
   
 
