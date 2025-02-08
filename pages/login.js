@@ -11,6 +11,7 @@ import Config from 'react-native-config';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {useFonts} from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
+import {IP_ADDRESS} from '@env'
 
 const Login = ({ onLogin, ...props }) => {
     const [fontsLoaded] = useFonts({
@@ -39,11 +40,11 @@ const Login = ({ onLogin, ...props }) => {
 
     const handleSignIn = () => {
       setError("");  // Reset any previous error
+      
       axios
-          .get(`http://192.168.12.221:8080/users/getUserByEmail?email=${email}`)
+          .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${email}`)
           .then((response) => {
               const userData = response.data;
-              console.log(userData)
               
               if (userData && userData.password === password) {
                   // Login successful, navigate to the home page or trigger onLogin
