@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, SafeAreaView, I
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from "@react-navigation/native";
+import { useGlobal } from "./context/global";
 import globalStyles from "./styles/globalStyles";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import axios from 'axios'; 
@@ -48,6 +49,10 @@ const Login = ({ onLogin, ...props }) => {
               
               if (userData && userData.password === password) {
                   // Login successful, navigate to the home page or trigger onLogin
+                  setGlobalState({
+                    email: userData.email,  // Store the email in global state
+                    type: userData.type,    // Store the type (borrower/lender) in global state
+                  });
                   onLogin(email); // Handle login state change here
               } else {
                   // If user is not found or any other issue
