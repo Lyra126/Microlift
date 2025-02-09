@@ -16,6 +16,7 @@ const Home = ({ route }) => {
   const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState("");
   const [borrowers, setBorrowers] = useState([]);
+  const [profilePic, profileImage] = useState("");
   const [businessIdea, setBusinessIdea] = useState("")
 
 
@@ -48,7 +49,8 @@ const Home = ({ route }) => {
             contributions: borrower.contributions,
             totalContributed: borrower.totalContributed,
             pendingLoans: borrower.pendingLoans,  
-            confirmedLoans: borrower.confirmedLoans 
+            confirmedLoans: borrower.confirmedLoans, 
+            profilePic: borrower.profileImage
           }));
   
           setBorrowers(borrowersData);
@@ -132,6 +134,12 @@ const Home = ({ route }) => {
             </View>
           ) : (
             <View style={styles.cardContent}>
+              {/*console.log("Profile Pic URL:", borrowers[currentIndex].profilePic);*/}
+              <Image 
+  source={require("./assets/cake.jpg")} 
+  style={styles.profilePic} 
+/>
+
               <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
               <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
               <Text style={styles.email}>{borrowers[currentIndex].email}</Text>
@@ -316,6 +324,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Arial",
   },
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  }
 });
 
 export default Home;
