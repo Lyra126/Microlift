@@ -7,7 +7,7 @@ import { useGlobal } from "./context/global";
 import globalStyles from "./styles/globalStyles";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import axios from 'axios'; 
-import Navigation from "../Navigation"
+import Navigation from "../NavigationHome"
 import Config from 'react-native-config';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {useFonts} from "expo-font";
@@ -29,6 +29,7 @@ const Login = ({ onLogin, ...props }) => {
     const [password,setPassword]=  useState("");
     const [error, setError] = useState("");
     const { setGlobalState } = useGlobal();
+     const [type, setType] = useState(null);
 
 
     useEffect(() => {
@@ -41,46 +42,17 @@ const Login = ({ onLogin, ...props }) => {
         return null;
     }
 
-  
-
-    const checkUserExists = async (email) => {
-      const response = await axios.get(`http://${IP_ADDRESS}:8081/appdata/checkLenderExists?email=${email}`);
-      if (response.data) {
-        const userData = response.data;
-        setGlobalState({ // stores email/type in global state
-          email: userData.email,
-          type: userData.type, 
-        });
-        onLogin(email); // Handle login state change here
-      } else {
-        const response = await axios.get(`http://${IP_ADDRESS}:8081/appdata/checkBorrowerExists?email=${email}`);
-        if (response.data) {
-          const userData = response.data;
-          setGlobalState({ // stores email/type in global state
-            email: userData.email,
-            type: userData.type, 
-          });
-          onLogin(email); // Handle login state change here
-        }else{
-          setError("User not found. Please try again.");
-        }
-      }
-
-    };
 
 
-
-
-
-    const handleSignIn = () => {
+    const handleSignIn =  () => {
         setError("");  // Reset any previous error
-        //checkUserExists(email);
       
-      axios
-
-          .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${email}`)
+      if (type === false){
+        axios
+          .get(`http://${IP_ADDRESS}:8080/appdata/getLenderByEmail?email=${email}`)
           .then((response) => {
               const userData = response.data;
+              console.log(userData);
               console.log(userData.email);
               if (userData && userData.password === password) {
                   // Login successful, navigate to the home page or trigger onLogin
@@ -88,7 +60,7 @@ const Login = ({ onLogin, ...props }) => {
                     email: userData.email,
                     type: userData.type, 
                   });
-                  onLogin(email); // Handle login state change here
+                  onLogin(email, false); // Handle login state change here
               } else {
                   // If user is not found or any other issue
                   setError("Incorrect email or password. Please try again.");
@@ -110,6 +82,42 @@ const Login = ({ onLogin, ...props }) => {
                   setError("There was an issue signing in. Please try again later.");
               }
           });
+        } else{
+          axios
+
+          .get(`http://${IP_ADDRESS}:8080/appdata/getBorrowerByEmail?email=${email}`)
+          .then((response) => {
+              const userData = response.data;
+              console.log(userData.email);
+              if (userData && userData.password === password) {
+                  // Login successful, navigate to the home page or trigger onLogin
+                  setGlobalState({ // stores email/type in global state
+                    email: userData.email,
+                    type: userData.type, 
+                  });
+                  onLogin(email, true); // Handle login state change here
+              } else {
+                  // If user is not found or any other issue
+                  setError("Incorrect email or password. Please try again.");
+              }
+          })
+          .catch((error) => {
+              // Error handling for any network issues or 404
+              if (error.response) {
+                  if (error.response.status === 404) {
+                      // Handle user not found
+                      setError("User not found. Please check your email and password.");
+                  } else {
+                      // Handle other types of errors
+                      setError(`Error: ${error.response.data.message || "An issue occurred. Please try again later."}`);
+                  }
+              } else {
+                  // Handle network or unexpected errors
+                  console.error("Error signing in:", error);
+                  setError("There was an issue signing in. Please try again later.");
+              }
+          });
+        }
     };
   
 
@@ -119,8 +127,39 @@ const Login = ({ onLogin, ...props }) => {
                 <Ionicons name="arrow-back-circle-outline" size={50} color="black" style={{marginTop: 15}} />
             </TouchableOpacity>
             <View style = {styles.loginInformation}>
+              
             <Text style={styles.welcomeBack}>Welcome Back!</Text>
+                
                 <View style={styles.inputView}>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginLeft: 10 }}>
+                    <TouchableOpacity 
+                        style={[
+                            styles.button, 
+                            { flex: 1, marginRight: 5 , marginTop: 0}, 
+                            type === false && { backgroundColor: 'gray' }
+                        ]}  
+                        onPress={() => {
+                            setType(false);
+                            console.log("Selected Type: ", type);
+                        }}
+                        >
+                        <Text style={[styles.buttonText, type === false && { color: '#fff' }]}>Lender</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity 
+                            style={[
+                                styles.button, 
+                                { flex: 1, marginRight: 5, marginTop: 0}, 
+                                type === true && { backgroundColor: 'gray' }
+                            ]} 
+                            onPress={() => {setType(true);
+                                console.log("Selected Type: ", type);
+                            }}
+                        >
+                            <Text style={[styles.buttonText, type === true && { color: '#fff' }]}>Borrower</Text>
+                        </TouchableOpacity>
+                </View>
+                 <View style={{height: 30}}/>
                     <View style={styles.inputSection}>
                         <FontAwesome name="envelope" size={20} color="#000" />
                         <TextInput

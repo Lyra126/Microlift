@@ -222,22 +222,42 @@ const checkBorrowerExists = async (req, res) => {
 
 
 
-const createLender = async (req, res) => {
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Initialize variables for borrower and lender
+        let borrower = null;
+        let lender = null;
+
+        // Try to find the borrower
+        borrower = await Borrower.findOne({ email });
+
+        // If borrower found, check password
+        if (borrower && borrower.password === password) {
+            return res.status(200).json({ message: "Login successful", user: borrower });
+        }
+
+        // If borrower not found or password is incorrect, try to find lender
+        lender = await Lender.findOne({ email });
+
+        if (lender && lender.password === password) {
+            return res.status(200).json({ message: "Login successful", user: lender });
+        }
+
+        // If neither borrower nor lender matches, return unauthorized
+        return res.status(401).json({ message: "Incorrect email or password" });
+
+    } catch (error) {
+        console.error("Login error:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
 };
 
-
-const createBorrower = async (req, res) => {
-};
-
-const getPersonById = async (req, res) => {
-};
 
 export{
     getLenders,
     getBorrowers,
-    createLender,
-    createBorrower,
-    getPersonById,
     getLenderByEmail,
     getBorrowerByEmail,
     updateLenderPendingLoans,
@@ -245,5 +265,6 @@ export{
     updateLenderConfirmedLoans,
     updateBorrowerConfirmedLoans,
     checkLenderExists,
-    checkBorrowerExists
+    checkBorrowerExists,
+    login
 }
