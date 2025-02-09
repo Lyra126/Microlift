@@ -184,11 +184,11 @@ const updateBorrowerConfirmedLoans = async (req, res) => {
 
 const checkLenderExists = async (req, res) => {
     try {
-        const { name, email } = req.query;
-        const lender = await LenderModel.findOne({ name, email });
-       
+        const {email } = req.query;
+        const lender = await LenderModel.findOne({email });
 
         if (lender) {
+            res.json(lender);
             return res.status(200).json({ 
                 exists: true, 
             });
@@ -203,8 +203,8 @@ const checkLenderExists = async (req, res) => {
 
 const checkBorrowerExists = async (req, res) => {
     try {
-        const { name, email } = req.query;
-        const borrower = await BorrowerModel.findOne({ name, email });
+        const { email } = req.query;
+        const borrower = await BorrowerModel.findOne({ email });
 
         if (borrower) {
             return res.status(200).json({ 

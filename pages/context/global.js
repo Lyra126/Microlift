@@ -18,3 +18,5 @@ export const GlobalProvider = ({ children }) => {
 
 // to access the global state and setter
 export const useGlobal = () => useContext(GlobalContext);
+
+

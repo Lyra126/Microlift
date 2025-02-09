@@ -13,6 +13,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import {useFonts} from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import {IP_ADDRESS} from '@env'
+import { checkBorrowerExists } from "../server/controllers/controller";
 
 const Login = ({ onLogin, ...props }) => {
     const [fontsLoaded] = useFonts({
@@ -29,6 +30,7 @@ const Login = ({ onLogin, ...props }) => {
     const [error, setError] = useState("");
     const { setGlobalState } = useGlobal();
 
+
     useEffect(() => {
         if (fontsLoaded) {
             SplashScreen.hideAsync();
@@ -39,12 +41,43 @@ const Login = ({ onLogin, ...props }) => {
         return null;
     }
 
+  
+
+    const checkUserExists = async (email) => {
+      const response = await axios.get(`http://${IP_ADDRESS}:8081/appdata/checkLenderExists?email=${email}`);
+      if (response.data) {
+        const userData = response.data;
+        setGlobalState({ // stores email/type in global state
+          email: userData.email,
+          type: userData.type, 
+        });
+        onLogin(email); // Handle login state change here
+      } else {
+        const response = await axios.get(`http://${IP_ADDRESS}:8081/appdata/checkBorrowerExists?email=${email}`);
+        if (response.data) {
+          const userData = response.data;
+          setGlobalState({ // stores email/type in global state
+            email: userData.email,
+            type: userData.type, 
+          });
+          onLogin(email); // Handle login state change here
+        }else{
+          setError("User not found. Please try again.");
+        }
+      }
+
+    };
+
+
+
+
 
     const handleSignIn = () => {
-      console.log(email);
         setError("");  // Reset any previous error
+        //checkUserExists(email);
       
       axios
+
           .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${email}`)
           .then((response) => {
               const userData = response.data;

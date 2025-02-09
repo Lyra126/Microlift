@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { useGlobal } from './context/global';
 import axios from 'axios'; 
 import { IP_ADDRESS } from '@env'
+import { useGlobal } from "./context/global";
 
 const Profile = () => {
   const [editing, setEditing] = useState(false);
   const { globalState } = useGlobal();
+  const { email } = globalState;  
+
   
   useEffect(() => {
     console.log('Current Global State:', globalState);  // logs global email and user type
-  }, [globalState]);
+    console.log(email);
+  }, [globalState, email]);
   
   const [userData, setUserData] = useState({
     profileImage: require('./assets/finance.png'),
     name: "John Doe",
     company: "Temporary Company",
-    verification: "Verified",
-    description: "An experienced lender in the financial industry.",
     goals: "Help borrowers achieve financial independence.",
     maxAmount: "$50,000",
-    targetGoal: "100 loans per year"
   });
 
   useEffect(() => {
     axios
-      .get(`http://${IP_ADDRESS}:8080/users/getUserByEmail?email=${globalState.email}`)
+      .get(`http://${IP_ADDRESS}:8080/appdata/getLenderByEmail?email=${email}`)
       .then((response) => {
         const requestData = response.data;
         // updates with global context / current user
@@ -33,16 +33,19 @@ const Profile = () => {
           ...prevData,
           name: requestData.name,
           company: requestData.businessName,
-          verification: requestData.verification,
-          description: requestData.description,
-          goals: requestData.goals,
-          maxAmount: requestData.maxAmount,
-          targetGoal: requestData.targetGoal
-        }));
+          email: requestData.email,
+          contributions: requestData.contributions,
+          totalContributed: requestData.totalContributed,
+          pendingLoans: requestData.pendingLoans,
+          confirmedLoans: requestData.confirmedLoans,
+          description: 'An experienced lender in the financial industry'
+      }));
       }, )
+      
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
+      console.log(userData);
   }, []); 
 
   const handleEditChange = (field, value) => {
@@ -72,9 +75,10 @@ const Profile = () => {
               </View>
             </View>
 
+
             <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}>Verification</Text>
-              <Text style={styles.bioText}>{userData.verification}</Text>
+              <Text style={styles.bioTitle}>Email</Text>
+              <Text style={styles.bioText}>{userData.email}</Text>
             </View>
 
             <View style={styles.bioContainer}>
@@ -90,18 +94,7 @@ const Profile = () => {
               )}
             </View>
 
-            <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}>Company</Text>
-              {editing ? (
-                <TextInput
-                  style={styles.bioTextInput}
-                  value={userData.company}
-                  onChangeText={text => handleEditChange('company', text)}
-                />
-              ) : (
-                <Text style={styles.bioText}>{userData.company}</Text>
-              )}
-            </View>
+            
 
             <View style={styles.bioContainer}>
               <Text style={styles.bioTitle}>Goals</Text>
@@ -130,17 +123,29 @@ const Profile = () => {
             </View>
 
             <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}>Target Goal</Text>
+              <Text style={styles.bioTitle}> Total Lent</Text>
               {editing ? (
                 <TextInput
                   style={styles.bioTextInput}
-                  value={userData.targetGoal}
-                  onChangeText={text => handleEditChange('targetGoal', text)}
+                  value={userData.totalContributed}
+                  onChangeText={text => handleEditChange('totalContributed', text)}
                 />
               ) : (
-                <Text style={styles.bioText}>{userData.targetGoal}</Text>
+                <Text style={styles.bioText}>${userData.totalContributed}</Text>
               )}
             </View>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bioTitle}>Contributions</Text>
+              {userData.contributions && userData.contributions.length > 0 ? (
+                userData.contributions.map((loan, index) => (
+                  <Text key={index} style={styles.bioText}>{loan}</Text>
+                ))
+              ) : (
+                <Text style={styles.bioText}>No contributions available</Text>
+              )}
+            </View>
+
 
             <TouchableOpacity
               style={styles.editButton}
