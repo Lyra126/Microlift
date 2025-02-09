@@ -1,5 +1,8 @@
 # Microlift
 
+## Demo Video
+https://youtube.com/shorts/JQLPDEQ8ha4
+
 ## How to use
 After cloning our respository, make sure to download Expo Go to run the app on mobile as intended. Adjust the IP address located in the .env file to your own. Open one terminal to cd into the server directory, then run "npm start". Open a separate terminal and run "npx expo start". Once a QR code is available, scan it with either the Expo Go app or your camera.
 
