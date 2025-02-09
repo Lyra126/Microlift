@@ -12,7 +12,7 @@ const BorrowerSchema = new mongoose.Schema({
     loans: {type: String, required: true},
     pendingLoans: {type: Array, required: true},
     confirmedLoans: {type: Array, required: true},
-
+    profilePic: {type: String, required: false},
 }); 
 
 const BorrowerModel = mongoose.model('borrower', BorrowerSchema);

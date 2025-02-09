@@ -135,10 +135,7 @@ const Home = ({ route }) => {
           ) : (
             <View style={styles.cardContent}>
               {/*console.log("Profile Pic URL:", borrowers[currentIndex].profilePic);*/}
-              <Image 
-  source={require("./assets/cake.jpg")} 
-  style={styles.profilePic} 
-/>
+              <Image source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Arduino_ftdi_chip-1.jpg" }} style={styles.profilePic} />
 
               <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
               <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
