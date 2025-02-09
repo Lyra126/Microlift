@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
         height: 200, 
         alignSelf: 'center', 
         marginTop: '40%', 
-        resizeMode: 'contain',  
+        resizeMode: 'contain', 
+        marginTop: 120, 
     },    
     welcometext: {
         fontFamily: 'Gabarito-Bold',

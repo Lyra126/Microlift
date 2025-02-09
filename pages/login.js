@@ -179,7 +179,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Gabarito-Bold',
         fontSize: 30,
         fontWeight: 'bold',
-        marginBottom: 5,
+        textAlign: 'center',
+        marginTop: -10,
     },
     image : {
         height : 160,
