@@ -280,8 +280,6 @@ const styles = StyleSheet.create({
         paddingHorizontal : 20,
         fontSize: 15,
         backgroundColor: "white",
-        borderRadius: 20,
-        borderColor: "black",
         fontFamily: 'Outfit-Regular',
     },
     forgotPasswordView : {

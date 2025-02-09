@@ -62,7 +62,6 @@ const Profile = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <TouchableOpacity style={styles.backButton}>
-            <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
 
           <View style={styles.profileContainer}>
@@ -141,7 +140,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D5E8D4", 
+    backgroundColor: "#f7eeeb", 
     padding: 20,
   },
   backButton: {
@@ -155,7 +154,7 @@ const styles = StyleSheet.create({
     color: "#2C6E49",
   },
   profileContainer: {
-    backgroundColor: "#FFFFFF", 
+    backgroundColor: "white", 
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
@@ -180,55 +179,66 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: "#2C6E49",
+    fontFamily:'Outfit-Regular',
+    color: "#E7B5AC",
   },
   company: {
-    fontSize: 16,
-    color: "#555",
+    fontSize: 14,
+    fontFamily: "Outfit-Regular",
+    color: "black",
   },
   bioContainer: {
-    backgroundColor: "#F0F0F0",
-    padding: 10,
+    backgroundColor: "white",
+    borderColor: "gray",
     borderRadius: 8,
+    borderWidth: 2,
+    padding: 10,
     marginVertical: 5,
   },
   bioTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#333",
+    fontFamily: 'Outfit-Regular',
+    color: "black",
   },
   bioText: {
     fontSize: 14,
-    color: "#333",
+    fontFamily: 'Outfit-Regular',
+    color: "gray",
   },
   bioTextInput: {
     fontSize: 14,
-    color: "#333",
+    fontFamily: 'Outfit-Regular',
+    color: "black",
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "gray",
     paddingVertical: 5,
   },
   nameInput: {
     fontSize: 22,
     fontWeight: 'bold',
+    fontFamily: 'Outfit-Regular',
     color: "#2C6E49",
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "gray",
     paddingVertical: 5,
   },
   editButton: {
-    backgroundColor: "#A5D6A7", 
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
+    backgroundColor : "#E7B5AC",
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     alignSelf: 'flex-end',
     marginTop: 10,
   },
   editButtonText: {
-    color: "#2C6E49",
+    color: "white",
     fontWeight: "bold",
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+
   },
 });
 

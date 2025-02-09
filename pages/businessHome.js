@@ -214,7 +214,7 @@ const BusinessHome = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D5E8D4", 
+    backgroundColor: "#f7eeeb", 
     padding: 20,
   },
   backButton: {
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 22,
     fontWeight: 'bold',
+    fontFamily: 'Outfit-Regular',
     color: "#2C6E49",
   },
   profileContainer: {
@@ -253,34 +254,40 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: "#2C6E49",
+    fontFamily:'Outfit-Regular',
+    color: "#E7B5AC",
   },
   company: {
-    fontSize: 16,
-    color: "#555",
+    fontSize: 14,
+    fontFamily: "Outfit-Regular",
+    color: "black",
   },
   bioContainer: {
-    backgroundColor: "#F0F0F0",
-    padding: 10,
+    backgroundColor: "white",
+    borderColor: "gray",
     borderRadius: 8,
+    borderWidth: 2,
+    padding: 10,
     marginVertical: 5,
   },
   bioTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#333",
+    fontFamily: 'Outfit-Regular',
+    color: "black",
   },
   bioText: {
     fontSize: 14,
-    color: "#333",
+    fontFamily: 'Outfit-Regular',
+    color: "gray",
   },
   toggleButton: {
-    backgroundColor: "#A5D6A7", 
+    backgroundColor: "#E7B5AC", 
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 5,
+    borderRadius: 12,
     marginVertical: 10,
     alignSelf: 'flex-start',
     justifyContent: 'center', 
@@ -288,13 +295,13 @@ const styles = StyleSheet.create({
     width: '100%' 
   },
   toggleButtonText: {
-    color: "#2C6E49",
+    color: "white",
     fontWeight: "bold",
     textAlign: "center",
     width: '100%' 
   },
   acceptButton: {
-    backgroundColor: "#A5D6A7", 
+    backgroundColor: "#E7B5AC", 
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 5,
@@ -302,7 +309,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   acceptButtonText: {
-    color: "#2C6E49",
+    color: "white",
     fontWeight: "bold",
   }
 });

@@ -127,17 +127,19 @@ const Home = ({ route }) => {
         <TouchableOpacity style={styles.card} onPress={handleFlip}>
           {flipped ? (
             <View style={styles.cardContent}>
-              <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
+              <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
+              <Text style={styles.email}>{borrowers[currentIndex].email}</Text>
               <Text style={styles.businessIdea}>{borrowers[currentIndex].businessIdea}</Text>
             </View>
           ) : (
             <View style={styles.cardContent}>
               {/*console.log("Profile Pic URL:", borrowers[currentIndex].profilePic);*/}
               <Image source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Arduino_ftdi_chip-1.jpg" }} style={styles.profilePic} />
+              <Image 
+              style={styles.profilePic} 
+/>
 
               <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
-              <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
-              <Text style={styles.email}>{borrowers[currentIndex].email}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -162,7 +164,7 @@ const Home = ({ route }) => {
             console.log("Liked");
           }}
         >
-          <Ionicons name="heart" size={32} color="white" />
+          <Ionicons name="checkmark" size={32} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -183,7 +185,7 @@ const Home = ({ route }) => {
               keyboardType="numeric"
               value={loanAmount}
               onChangeText={setLoanAmount}
-              placeholderTextColor="#A9A9A9"
+              placeholderTextColor="gray"
             />
 
             <TextInput
@@ -192,7 +194,7 @@ const Home = ({ route }) => {
               keyboardType="numeric"
               value={percentageCut}
               onChangeText={setPercentageCut}
-              placeholderTextColor="#A9A9A9"
+              placeholderTextColor="gray"
             />
             {error ? (
                 <Text style={styles.errorText}>{error}</Text>
@@ -222,7 +224,7 @@ const Home = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FDE9EA",
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -230,7 +232,7 @@ const styles = StyleSheet.create({
     width: width * 0.85,
     height: 420,
     borderRadius: 12,
-    backgroundColor: "#F9E0DB",
+    backgroundColor: "#f7eeeb",
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
@@ -244,30 +246,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   businessName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#588061",
-    fontFamily: "Arial",
+    color: "#E7B5AC",
+    fontFamily: "Outfit-Regular",
   },
   businessIdea: {
     fontSize: 16,
     color: "black",
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 30,
     paddingHorizontal: 20,
-    fontFamily: "Arial",
+    fontFamily: "Outfit-Regular",
   },
   name: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#E7B5AC",
-    fontFamily: "Arial",
+    fontFamily: "Outfit-Regular",
+    marginTop: -30,
   },
   email: {
-    fontSize: 16,
-    color: "#333",
-    marginTop: 5,
-    fontFamily: "Arial",
+    fontSize: 18,
+    color: "black",
+    fontFamily: "Outfit-Regular",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -308,12 +310,14 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "gray",
     borderRadius: 8,
+    borderWidth: 2,
     padding: 10,
     marginBottom: 15,
     color: "#333",
-    fontFamily: "Arial",
+    fontFamily: "Outfit-Regular",
+    fontSize: 18,
   },
   modalButtons: {
     flexDirection: "row",
@@ -325,13 +329,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     textAlign: "center",
-    fontFamily: "Arial",
+    fontFamily: "Outfit-Regular",
   },
   profilePic: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    marginBottom: -80,
   }
 });
 
