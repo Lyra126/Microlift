@@ -101,32 +101,39 @@ const SignUp = ({ onLogin, ...props }) => {
     return (
         <SafeAreaView  style={[globalStyles.AndroidSafeArea, styles.container]}>
             <TouchableOpacity style={styles.backButton} onPress={() => {navigation.navigate('PromptLoginSignUp')}}>
-                <Text style={{fontSize: 37}}> ← </Text>
+                <Ionicons name="arrow-back-circle-outline" size={50} color="black" style={{marginTop: 15}} />
             </TouchableOpacity>
             <View style = {styles.loginInformation}>
                 <Text style={styles.welcomeBack}>Begin Your Journey</Text>
-                <Text style = {styles.welcomeText}>Just a few more steps to join our community</Text>
+                    <Text style={styles.optionChoice}>Please choose one of the following:</Text>
                 <View style={styles.inputView}>
-                    <View style={styles.inputSection}>
-                        <Ionicons name="options" size={20} color="#000" />
-                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginLeft: 10 }}>
-                            <TouchableOpacity 
-                                style={[styles.button, { flex: 1, marginRight: 5 }, type === false && { backgroundColor: '#007bff' }]}  
-                                onPress={() => {setType(false);
-                                    console.log("Selected Type: ", type);
-                                }}
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginLeft: 10 }}>
+                        <TouchableOpacity 
+                            style={[
+                                styles.button, 
+                                { flex: 1, marginRight: 5 , marginTop: -40}, 
+                                type === false && { backgroundColor: 'gray' }
+                            ]}  
+                            onPress={() => {
+                                setType(false);
+                                console.log("Selected Type: ", type);
+                            }}
                             >
-                                <Text style={[styles.buttonText, type === false && { color: '#fff' }]}>Lender</Text>
+                            <Text style={[styles.buttonText, type === false && { color: '#fff' }]}>Lender</Text>
                             </TouchableOpacity>
+                            
                             <TouchableOpacity 
-                                style={[styles.button, { flex: 1, marginRight: 5 }, type === true && { backgroundColor: '#007bff' }]} 
+                                style={[
+                                    styles.button, 
+                                    { flex: 1, marginRight: 5, marginTop: -40}, 
+                                    type === true && { backgroundColor: 'gray' }
+                                ]} 
                                 onPress={() => {setType(true);
                                     console.log("Selected Type: ", type);
                                 }}
                             >
                                 <Text style={[styles.buttonText, type === true && { color: '#fff' }]}>Borrower</Text>
                             </TouchableOpacity>
-                        </View>
                     </View>
                     <View style={styles.inputSection}>
                         <Ionicons name="person" size={20} color="#000" />
@@ -175,9 +182,9 @@ const SignUp = ({ onLogin, ...props }) => {
                     </TouchableOpacity>
                 <View style={styles.buttonView}>
                     <View style={styles.optionsText}>
-                        <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
-                        <Text style={{alignSelf:'center', paddingHorizontal:5, fontSize: 15, color: '#A9A9A9'}}>OR</Text>
-                        <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
+                        <View style={{backgroundColor: 'grey', height: 1, flex: 1, alignSelf: 'center'}} />
+                        <Text style={{alignSelf:'center', paddingHorizontal:5, fontSize: 15, color: 'grey'}}>OR</Text>
+                        <View style={{backgroundColor: 'grey', height: 1, flex: 1, alignSelf: 'center'}} />
                     </View>
                 </View>
 
@@ -203,7 +210,7 @@ const SignUp = ({ onLogin, ...props }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#8ec5e0',
+        backgroundColor: '#E7B5AC',
         padding: 40,
     },
     backButton: {
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
     },
 
     loginInformation: {
-        backgroundColor: '#e8efdd',
+        backgroundColor: 'white',
         height: '100%',
         borderRadius: 30,
         paddingTop: 50,
@@ -222,20 +229,22 @@ const styles = StyleSheet.create({
         fontFamily: 'Gabarito-Bold',
         fontSize: 30,
         fontWeight: 'bold',
-        marginBottom: 5,
+        textAlign: 'center',
+        marginTop: -10,
     },
-    welcomeText: {
+    optionChoice: {
         color: 'grey',
         fontSize: 17,
+        textAlign: 'center',
         fontFamily: 'Outfit-Regular',
-
+        marginTop: 10,
     },
     image : {
         height : 160,
         width : 170
     },
     inputView : {
-        marginTop: 30,
+        marginTop: 50,
         gap : 18,
         width : "100%",
         marginBottom: 30,
@@ -246,8 +255,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#fffff7',
+        backgroundColor: 'white',
+        borderColor: "gray",
         borderRadius: 20,
+        borderWidth: 2,
         fontSize: 15,
         paddingHorizontal: 20,
     },
@@ -255,12 +266,12 @@ const styles = StyleSheet.create({
         height : 50,
         width : "80%",
         paddingHorizontal : 20,
-        backgroundColor: "#FFFFF7FF",
-        borderRadius: 20,
+        backgroundColor: 'white',
+
         fontFamily: 'Outfit-Regular',
     },
     button : {
-        backgroundColor : "#77aac5",
+        backgroundColor : "#E7B5AC",
         height : 45,
         width : "100%",
         borderRadius : 20,
@@ -297,12 +308,14 @@ const styles = StyleSheet.create({
         borderRadius : 100,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: -15,
     },
     footerView : {
         flexDirection : "row",
         justifyContent: "center",
         alignItems: "center",
         marginVertical: 20,
+        marginTop: -20,
     },
     footerText : {
         textAlign: "center",
@@ -325,7 +338,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
     },
-
 });
 
 export default SignUp;

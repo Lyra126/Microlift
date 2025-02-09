@@ -66,6 +66,7 @@ const App = () => {
 // import React from 'react';
 // import { View, Text } from 'react-native';
 // import Home from "./pages/home";
+// import Login from "./pages/login";
 // import businessHome from "./pages/businessHome";
 // import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
@@ -84,8 +85,8 @@ const App = () => {
 // const App = () => {
 //   return (
 //     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="Home">
-//         <Stack.Screen name="Home" component={Home} />
+//       <Stack.Navigator initialRouteName="Login">
+//         <Stack.Screen name="Login" component={Login} />
 //       </Stack.Navigator>
 //     </NavigationContainer>
 //   );

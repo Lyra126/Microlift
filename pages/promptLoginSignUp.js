@@ -37,7 +37,7 @@ const PromptLoginSignUp = () => {
     }
     return (
         <SafeAreaView style={[globalStyles.AndroidSafeArea, styles.container]}>
-            <Image source={require('./assets/finance.png')} style={styles.image}></Image>
+            <Image source={require('./assets/logo.png')} style={styles.image}></Image>
             <Text style={styles.welcometext}>Welcome to MicroLift</Text>
             <Text style={styles.text}>Enabling women to secure small business loans through crowdfunding, credit building, and mentorship.</Text>
             <TouchableOpacity style={styles.loginButton} onPress={() => {navigation.navigate('Login')}}>
@@ -53,14 +53,17 @@ const PromptLoginSignUp = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e8efdd',
+        backgroundColor: 'white',
         padding: 40,
     },
     image: {
-        width: '100%', // Use percentage to make the image responsive
-        height: '30%', // Adjust as needed
-        marginTop: '30%',
-    },
+        width: 200, 
+        height: 200, 
+        alignSelf: 'center', 
+        marginTop: '40%', 
+        resizeMode: 'contain', 
+        marginTop: 120, 
+    },    
     welcometext: {
         fontFamily: 'Gabarito-Bold',
         fontSize: 30,
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     loginButton: {
-        backgroundColor: '#78bbd9',
+        backgroundColor: '#E7B5AC',
         padding: 15,
         borderRadius: 15,
         marginVertical: 10,
