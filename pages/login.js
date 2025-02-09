@@ -86,8 +86,7 @@ const Login = ({ onLogin, ...props }) => {
                 <Ionicons name="arrow-back-circle-outline" size={50} color="black" style={{marginTop: 15}} />
             </TouchableOpacity>
             <View style = {styles.loginInformation}>
-            <Text style={styles.welcomeBack}>Welcome Back! </Text>
-            <Text style = {styles.welcomeText}>We're happy to see you again! </Text>
+            <Text style={styles.welcomeBack}>Welcome Back!</Text>
                 <View style={styles.inputView}>
                     <View style={styles.inputSection}>
                         <FontAwesome name="envelope" size={20} color="#000" />
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     loginInformation: {
-       backgroundColor: '#F0EEEA',
+       backgroundColor: 'white',
         height: '100%',
         borderRadius: 30,
         paddingTop: 50,
@@ -181,11 +180,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         marginBottom: 5,
-    },
-    welcomeText: {
-        fontFamily: 'Outfit-Regular',
-        fontSize: 17,
-        color: 'gray',
     },
     image : {
         height : 160,
@@ -201,8 +195,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#fffff7',
+        backgroundColor: 'white',
+        borderColor: "gray",
         borderRadius: 20,
+        borderWidth: 2,
         paddingHorizontal: 20,
     },
     input: {
@@ -210,8 +206,9 @@ const styles = StyleSheet.create({
         width : "80%",
         paddingHorizontal : 20,
         fontSize: 15,
-        backgroundColor: "#FFFFF7FF",
+        backgroundColor: "white",
         borderRadius: 20,
+        borderColor: "black",
         fontFamily: 'Outfit-Regular',
     },
     forgotPasswordView : {

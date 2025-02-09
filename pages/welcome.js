@@ -66,7 +66,7 @@ const Welcome = () => {
             >
                 <Animated.Image
                     style={styles.image}
-                    source={require('./assets/finance.png')}
+                    source={require('./assets/logo.png')}
                 />
             </Animated.View>
         </SafeAreaView>
@@ -78,7 +78,7 @@ const SIZE = 100.0;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e8efdd',
+        backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
     },
