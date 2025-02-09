@@ -19,13 +19,13 @@ const Profile = () => {
     profileImage: require('./assets/finance.png'),
     name: "John Doe",
     company: "Temporary Company",
-    goals: "Help borrowers achieve financial independence.",
+    goals: "Achieving financial independence and freedom.",
     maxAmount: "$50,000",
   });
 
   useEffect(() => {
     axios
-      .get(`http://${IP_ADDRESS}:8080/appdata/getLenderByEmail?email=${email}`)
+      .get(`http://${IP_ADDRESS}:8080/appdata/getBorrowerByEmail?email=${email}`)
       .then((response) => {
         const requestData = response.data;
         // updates with global context / current user
@@ -34,11 +34,11 @@ const Profile = () => {
           name: requestData.name,
           company: requestData.businessName,
           email: requestData.email,
-          contributions: requestData.contributions,
-          totalContributed: requestData.totalContributed,
           pendingLoans: requestData.pendingLoans,
+          loans: requestData.loans,
           confirmedLoans: requestData.confirmedLoans,
-          description: 'An experienced lender in the financial industry'
+          goals: requestData.businessIdea,
+          description: 'Entrepreneur starting an electronics company'
       }));
       }, )
       
@@ -109,42 +109,20 @@ const Profile = () => {
               )}
             </View>
 
+
             <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}>Maximum Amount Willing to Lend</Text>
+              <Text style={styles.bioTitle}> Total Collected</Text>
               {editing ? (
                 <TextInput
                   style={styles.bioTextInput}
-                  value={userData.maxAmount}
-                  onChangeText={text => handleEditChange('maxAmount', text)}
+                  value={userData.loans}
+                  onChangeText={text => handleEditChange('loans', text)}
                 />
               ) : (
-                <Text style={styles.bioText}>{userData.maxAmount}</Text>
+                <Text style={styles.bioText}>${userData.loans}</Text>
               )}
             </View>
 
-            <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}> Total Lent</Text>
-              {editing ? (
-                <TextInput
-                  style={styles.bioTextInput}
-                  value={userData.totalContributed}
-                  onChangeText={text => handleEditChange('totalContributed', text)}
-                />
-              ) : (
-                <Text style={styles.bioText}>${userData.totalContributed}</Text>
-              )}
-            </View>
-
-            <View style={styles.bioContainer}>
-              <Text style={styles.bioTitle}>Contributions</Text>
-              {userData.contributions && userData.contributions.length > 0 ? (
-                userData.contributions.map((loan, index) => (
-                  <Text key={index} style={styles.bioText}>{loan}</Text>
-                ))
-              ) : (
-                <Text style={styles.bioText}>No contributions available</Text>
-              )}
-            </View>
 
 
             <TouchableOpacity

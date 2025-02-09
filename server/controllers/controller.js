@@ -60,12 +60,14 @@ const updateLenderPendingLoans = async (req, res) => {
     try {
         const {email, businessName, loan, cut } = req.body;
 
-        const lender = await LenderModel.findOne({ email });
+        const data = await LenderModel.find();
+        const lender = data.find(lender => lender.email === email);
         const newLoan = {
             businessName,
             loan,
             cut
         };
+        console.log(lender);
 
         // Push the new loan tuple to the pendingLoans array
         lender.pendingLoans.push(newLoan);
@@ -87,7 +89,8 @@ const updateBorrowerPendingLoans = async (req, res) => {
     try {
         const {email, businessName, loan, cut } = req.body;
 
-        const borrower = await BorrowerModel.findOne({ businessName });
+        const data = await BorrowerModel.find();
+        const borrower = data.find(borrower => borrower.businessName === businessName);
         const newLoan = {
             email,
             loan,

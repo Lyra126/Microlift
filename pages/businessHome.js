@@ -12,10 +12,10 @@ const BusinessHome = ({ route }) => {
   const [lenderEmails, setLenderEmails] = useState([]);
 
 
-    useEffect(() => {
-      //REMOVE
+  
 
-      setEmail("alice@example.com")
+    useEffect(() => {
+      
       if (route.params) {
         const { email } = route.params;
         setEmail(email);
@@ -23,10 +23,15 @@ const BusinessHome = ({ route }) => {
       fetchPendingLoans();
     }, [route.params, email]);
 
+    
+
+
     const fetchPendingLoans = async () => {
   
       try {
         // First axios call - fetching pending loans
+
+
         const pendingLoansResponse = await axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowerByEmail?email=${email}`);
         setPendingLoans(pendingLoansResponse.data.pendingLoans);
         setBusinessName(pendingLoansResponse.data.businessName);

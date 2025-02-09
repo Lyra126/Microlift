@@ -21,9 +21,7 @@ const Home = ({ route }) => {
 
 
   useEffect(() => {
-    //REMOVE
-    setEmail("emily@example.com")
-    setBusinessName("Alice's Bakery")
+
     if (route.params) {
       const { email } = route.params;
       setEmail(email);
@@ -34,10 +32,8 @@ const Home = ({ route }) => {
 
 
   const fetchbBorrowers = () => {
-    console.log("Fetching lenders...");
     axios.get(`http://${IP_ADDRESS}:8080/appdata/getBorrowers`)
       .then((response) => {
-        console.log("Response data:", response.data);
         
         if (response.data && response.data.length > 0) {
           const borrowersData = response.data.map(borrower => ({
@@ -64,6 +60,8 @@ const Home = ({ route }) => {
   };
 
   const updateDatabase = (loanAmount, percentageCut) => {
+    console.log(email, businessName);
+    console.log(loanAmount, percentageCut);
       axios
       .post(`http://${IP_ADDRESS}:8080/appdata/updateLenderPendingLoans`, {
           email: email,        // lender's email
@@ -108,7 +106,7 @@ const Home = ({ route }) => {
       setError("Percentage cut cannot be 0.")
       return;
     }
-    updateDatabase(loanAmount, percentageCut);
+    //updateDatabase(loanAmount, percentageCut);
     setModalVisible(false);
     setLoanAmount("");
     setPercentageCut("");
@@ -174,8 +172,11 @@ const Home = ({ route }) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
+       
         <View style={styles.modalContainer}>
+          
           <View style={styles.modalContent}>
+          {/* <Text style={styles.modalTitle}>Lend to {borrowers[currentIndex].name}</Text> */}
             <TextInput
               placeholder="Enter loan amount"
               style={styles.input}
@@ -298,6 +299,11 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
   },
   input: {
     width: "100%",
