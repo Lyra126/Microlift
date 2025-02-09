@@ -83,7 +83,7 @@ const Login = ({ onLogin, ...props }) => {
     return (
         <SafeAreaView  style={[globalStyles.AndroidSafeArea, styles.container]}>
             <TouchableOpacity style={styles.backButton} onPress={() => {navigation.navigate('PromptLoginSignUp')}}>
-                <Ionicons name="arrow-back-circle-outline" size={50} color="#335727" style={{marginTop: 15}} />
+                <Ionicons name="arrow-back-circle-outline" size={50} color="black" style={{marginTop: 15}} />
             </TouchableOpacity>
             <View style = {styles.loginInformation}>
             <Text style={styles.welcomeBack}>Welcome Back! </Text>
@@ -131,9 +131,9 @@ const Login = ({ onLogin, ...props }) => {
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
                 <View style={styles.optionsText}>
-                    <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
-                    <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 15, color: '#A9A9A9'}}>OR</Text>
-                    <View style={{backgroundColor: 'lightgrey', height: 1, flex: 1, alignSelf: 'center'}} />
+                    <View style={{backgroundColor: 'grey', height: 1, flex: 1, alignSelf: 'center'}} />
+                    <Text style={{ alignSelf:'center', paddingHorizontal:5, fontSize: 15, color: 'gray'}}>OR</Text>
+                    <View style={{backgroundColor: 'grey', height: 1, flex: 1, alignSelf: 'center'}} />
                 </View>
             </View>
 
@@ -162,14 +162,14 @@ const Login = ({ onLogin, ...props }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#99c587',
+        backgroundColor: '#E7B5AC',
         padding: 40,
     },
     backButton: {
         marginLeft: 20,
     },
     loginInformation: {
-       backgroundColor: '#e8efdd',
+       backgroundColor: '#F0EEEA',
         height: '100%',
         borderRadius: 30,
         paddingTop: 50,
@@ -221,11 +221,11 @@ const styles = StyleSheet.create({
     },
     forgetText : {
         fontSize : 14.5,
-        color : "#335727",
+        color : "gray",
         fontFamily: 'Outfit-Regular',
     },
     button : {
-        backgroundColor : "#96c08e",
+        backgroundColor : "#E7B5AC",
         height : 45,
         width : "100%",
         borderRadius : 20,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         color : "gray",
     },
     signup : {
-        color : "#517083",
+        color : "#E7B5AC",
         textAlign: "center",
         fontWeight : "bold",
         fontFamily: 'Outfit-Bold',

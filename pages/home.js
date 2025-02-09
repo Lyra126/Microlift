@@ -124,22 +124,21 @@ const Home = ({ route }) => {
   return (
     <View style={styles.container}>
       {borrowers.length > 0 && (
-  <TouchableOpacity style={styles.card} onPress={handleFlip}>
-    {flipped ? (
-      <View style={styles.cardContent}>
-        <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
-        <Text style={styles.businessIdea}>{borrowers[currentIndex].businessIdea}</Text>
-      </View>
-    ) : (
-      <View style={styles.cardContent}>
-        <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
-        <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
-        <Text style={styles.age}>{borrowers[currentIndex].email}</Text>
-      </View>
-    )}
-  </TouchableOpacity>
-)}
-
+        <TouchableOpacity style={styles.card} onPress={handleFlip}>
+          {flipped ? (
+            <View style={styles.cardContent}>
+              <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
+              <Text style={styles.businessIdea}>{borrowers[currentIndex].businessIdea}</Text>
+            </View>
+          ) : (
+            <View style={styles.cardContent}>
+              <Text style={styles.businessName}>{borrowers[currentIndex].businessName}</Text>
+              <Text style={styles.name}>{borrowers[currentIndex].name}</Text>
+              <Text style={styles.email}>{borrowers[currentIndex].email}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      )}
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -164,7 +163,6 @@ const Home = ({ route }) => {
         </TouchableOpacity>
       </View>
 
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -173,8 +171,6 @@ const Home = ({ route }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            {/* <Text style={styles.modalTitle}>Lend to {borrowers[currentIndex].name}</Text> */}
-
             <TextInput
               placeholder="Enter loan amount"
               style={styles.input}
@@ -220,7 +216,7 @@ const Home = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#FDE9EA",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -228,34 +224,48 @@ const styles = StyleSheet.create({
     width: width * 0.85,
     height: 420,
     borderRadius: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#F9E0DB",
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    padding: 20,
   },
   cardContent: {
     alignItems: "center",
+    justifyContent: "center",
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 12,
+  businessName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#588061",
+    fontFamily: "Arial",
+  },
+  businessIdea: {
+    fontSize: 16,
+    color: "black",
+    textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 20,
+    fontFamily: "Arial",
   },
   name: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#333",
+    color: "#E7B5AC",
+    fontFamily: "Arial",
   },
-  age: {
-    fontSize: 18,
-    color: "#666",
+  email: {
+    fontSize: 16,
+    color: "#333",
+    marginTop: 5,
+    fontFamily: "Arial",
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 40,
   },
   button: {
     width: 70,
@@ -266,10 +276,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   dislikeButton: {
-    backgroundColor: "#ff4d4d",
+    backgroundColor: "#E7B5AC",
   },
   likeButton: {
-    backgroundColor: "#4caf50",
+    backgroundColor: "#869F77",
   },
   modalContainer: {
     flex: 1,
@@ -284,18 +294,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
   input: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "black",
     borderRadius: 8,
     padding: 10,
     marginBottom: 15,
+    color: "#333",
+    fontFamily: "Arial",
   },
   modalButtons: {
     flexDirection: "row",
@@ -303,11 +310,12 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 14,
     marginBottom: 10,
-    textAlign: 'center',
-},
+    textAlign: "center",
+    fontFamily: "Arial",
+  },
 });
 
 export default Home;
